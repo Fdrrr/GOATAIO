@@ -11,6 +11,7 @@ from discord import SyncWebhook
 from colorama import Fore 
 import tkinter.filedialog as fd
 import ctypes
+import sys
 
 
 
@@ -19,16 +20,13 @@ blue, red, lightred, white, green, cyan, lightblue, reset, magenta, lightmagenta
 
 
 NAME = '''
+ ██████╗      ██████╗      █████╗     ████████╗    ███████╗     █████╗ ██╗ ██████╗ 
+██╔════╝     ██╔═══██╗    ██╔══██╗    ╚══██╔══╝    ██╔════╝    ██╔══██╗██║██╔═══██╗
+██║  ███╗    ██║   ██║    ███████║       ██║       █████╗      ███████║██║██║   ██║v
+██║   ██║    ██║   ██║    ██╔══██║       ██║       ██╔══╝      ██╔══██║██║██║   ██║
+╚██████╔╝    ╚██████╔╝    ██║  ██║       ██║       ███████╗    ██║  ██║██║╚██████╔╝
+ ╚═════╝      ╚═════╝     ╚═╝  ╚═╝       ╚═╝       ╚══════╝    ╚═╝  ╚═╝╚═╝ ╚═════╝ 
 
-   ▄████      ▒█████       ▄▄▄         ▄▄▄█████▓    ▓█████     ▓█████▄       ██    ▄▄▄█████▓     ▒█████       ██▀███      
-▒ ██▒ ▀█▒    ▒██▒  ██▒    ▒████▄       ▓  ██▒ ▓▒    ▓█   ▀     ▒██▀ ██▌    ▒▓██    ▓  ██▒ ▓▒    ▒██▒  ██▒    ▓██ ▒ ██▒    
-░▒██░▄▄▄░    ▒██░  ██▒    ▒██  ▀█▄     ▒ ▓██░ ▒░    ▒███       ░██   █▌    ░▒██    ▒ ▓██░ ▒░    ▒██░  ██▒    ▓██ ░▄█ ▒    
-░░▓█  ██▓    ▒██   ██░    ░██▄▄▄▄██    ░ ▓██▓ ░     ▒▓█  ▄    ▒░▓█▄   ▌     ░██    ░ ▓██▓ ░     ▒██   ██░    ▒██▀▀█▄      
-░▒▓███▀▒░    ░ ████▓▒░     ▓█   ▓██      ▒██▒ ░     ░▒████    ░░▒████▓      ░██      ▒██▒ ░     ░ ████▓▒░    ░██▓ ▒██▒    
- ░▒   ▒      ░ ▒░▒░▒░      ▒▒   ▓▒█      ▒ ░░       ░░ ▒░     ░ ▒▒▓  ▒      ░▓       ▒ ░░       ░ ▒░▒░▒░     ░ ▒▓ ░▒▓░    
-  ░   ░        ░ ▒ ▒░       ░   ▒▒         ░         ░ ░        ░ ▒  ▒       ▒         ░          ░ ▒ ▒░       ░▒ ░ ▒░    
-░ ░   ░ ░    ░ ░ ░ ▒        ░   ▒        ░ ░           ░        ░ ░  ░       ▒       ░ ░        ░ ░ ░ ▒         ░   ░     
-      ░          ░ ░            ░                      ░          ░          ░                      ░ ░         ░         
 
                     
 '''
@@ -842,9 +840,14 @@ def Filter_urls():
             file.write(line.strip()+"\n")
 
 
+
+
 def SQL_SCANNER():
+    start = time.time()
     os.system("cls")
     PrintGradient("#00FFFF","#FF69B4",NAME)
+    cpm = "calculating"
+    TP = 0 
     MySQL = 0
     MsSQL = 0
     PostGRES = 0
@@ -866,19 +869,19 @@ def SQL_SCANNER():
         retries+=1
         try:
             checker = requests.post(line + check)
-            if "MySQL" in checker.text:
+            if "MySQL" or "mysql" in checker.text:
                 MySQL+=1
                 sqls+=1
-            elif "native client" in checker.text:
+            elif "native client" or "Native Client" in checker.text:
                 MsSQL+=1
                 sqls+=1
-            elif "syntax error" in checker.text:
+            elif "syntax error" or "Syntax Error" in checker.text:
                 PostGRES+=1
                 sqls+=1
-            elif "ORA" in checker.text:
+            elif "ORA" or "ora" in checker.text:
                 Oracle+=1
                 sqls+=1
-            elif "MariaDB" in checker.text:
+            elif "MariaDB" or "mariadb" in checker.text:
                 MariaDB+=1
                 sqls+=1
             elif "You have an error in your SQL syntax;" in checker.text:
@@ -889,8 +892,31 @@ def SQL_SCANNER():
 
         except:
             Errorr+=1
-        ctypes.windll.kernel32.SetConsoleTitleW(f"|GOAT-EDITOR|   |MODULE|:(SQLI_SCANNER) Nothing:{nothing} Nones: {Nonee}  MYSQL= {MySQL} MsSQL: {MsSQL} PostGRES: {PostGRES} Oracle: {Oracle} MariaDB: {MariaDb}  OVR(SQLS): {sqls}  ERORRS: {Errorr} Checks:{retries}")
-        print(f"Nothing:{nothing} ||Nones: {Nonee} || MYSQL= {MySQL} || MsSQL: {MsSQL} || PostGRES: {PostGRES} || Oracle: {Oracle} || MariaDB: {MariaDb} || OVR(SQLS): {sqls} || Erros:{Errorr} || Checks:{retries}",end="\r")
+        ctypes.windll.kernel32.SetConsoleTitleW(f"|GOAT-EDITOR|   |MODULE|:(SQLI_SCANNER) RESULTS=    Nothing:{nothing}   Nones: {Nonee}     MYSQL= {MySQL}   MsSQL: {MsSQL}   PostGRES: {PostGRES}   Oracle: {Oracle}   MariaDB: {MariaDb}    OVR(SQLS): {sqls}    ERORRS: {Errorr}   Checks:{retries}   TimePassed:{TP}")
+        #print(f"\rNothing:{nothing} ||Nones: {Nonee} || MYSQL= {MySQL} || MsSQL: {MsSQL} || PostGRES: {PostGRES} || Oracle: {Oracle} || MariaDB: {MariaDb} || OVR(SQLS): {sqls} || Erros:{Errorr} || Checks:{retries}\r",end="\r")
+        os.system("cls")
+        end = time.time()
+        total = end-start
+        TP = round(total)
+        cpm = int(round((retries/TP)*60))
+        PrintGradient("#00FFFF","#FF69B4",NAME)
+        print(f""" 
+            {lightmagenta}     Checks:{retries}
+       {magenta} |MySql:             {MySQL}   |
+       {lightblue} |                       |
+        {blue}|MsSql:             {MsSQL}   |
+        {lightcyan}|                       |
+        {cyan}|PostGres:          {PostGRES}   |
+       {lightred} |                       |
+        {red}|Oracle:            {Oracle}   |
+        {green}|                       |  
+        {yellow}|MariaDb:           {MariaDb}   |
+        
+        {magenta}OVR:{sqls}         Errors:{Errorr}   
+                            TP:{TP}
+                            CPM:{cpm}     
+
+""")
     input("choice: ")
 
 def Join_multiple_combos():
