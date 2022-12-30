@@ -3,9 +3,14 @@ import random
 from listset import listset
 import datetime
 import os
-import time 
-import sqlite3
+import time
+import requests
+import json as js  
 import re 
+import mysql.connector
+import hashlib
+import platform
+import os
 import socket
 from discord import SyncWebhook
 from colorama import Fore 
@@ -14,22 +19,20 @@ import ctypes
 import sys
 
 
+website = "https://goatauth.deta.dev/"
 
-blue, red, lightred, white, green, cyan, lightblue, reset, magenta, lightmagenta, lightcyan, yellow = Fore.BLUE, Fore.RED, Fore.LIGHTRED_EX, Fore.WHITE, Fore.GREEN, Fore.CYAN, Fore.LIGHTBLUE_EX, Fore.RESET, Fore.MAGENTA, Fore.LIGHTMAGENTA_EX, Fore.LIGHTCYAN_EX, Fore.YELLOW
+
+bl, ree, lr, wh, gr, cy, lb, res, ma, lm, lc, ye = Fore.BLUE, Fore.RED, Fore.LIGHTRED_EX, Fore.WHITE, Fore.GREEN, Fore.CYAN, Fore.LIGHTBLUE_EX, Fore.RESET, Fore.MAGENTA, Fore.LIGHTMAGENTA_EX, Fore.LIGHTCYAN_EX, Fore.YELLOW
 
 
 
 NAME = '''
- ██████╗      ██████╗      █████╗     ████████╗    ███████╗     █████╗ ██╗ ██████╗ 
-██╔════╝     ██╔═══██╗    ██╔══██╗    ╚══██╔══╝    ██╔════╝    ██╔══██╗██║██╔═══██╗
-██║  ███╗    ██║   ██║    ███████║       ██║       █████╗      ███████║██║██║   ██║v
-██║   ██║    ██║   ██║    ██╔══██║       ██║       ██╔══╝      ██╔══██║██║██║   ██║
-╚██████╔╝    ╚██████╔╝    ██║  ██║       ██║       ███████╗    ██║  ██║██║╚██████╔╝
- ╚═════╝      ╚═════╝     ╚═╝  ╚═╝       ╚═╝       ╚══════╝    ╚═╝  ╚═╝╚═╝ ╚═════╝ 
-
-
-                    
-'''
+     ██████╗      ██████╗      █████╗     ████████╗         █████╗     ██╗     ██████╗ 
+    ██╔════╝     ██╔═══██╗    ██╔══██╗    ╚══██╔══╝        ██╔══██╗    ██║    ██╔═══██╗
+    ██║  ███╗    ██║   ██║    ███████║       ██║           ███████║    ██║    ██║   ██║
+    ██║   ██║    ██║   ██║    ██╔══██║       ██║           ██╔══██║    ██║    ██║   ██║
+    ╚██████╔╝    ╚██████╔╝    ██║  ██║       ██║           ██║  ██║    ██║    ╚██████╔╝
+     ╚═════╝      ╚═════╝     ╚═╝  ╚═╝       ╚═╝           ╚═╝  ╚═╝    ╚═╝     ╚═════╝ '''
 
 os.system("cls")
 '''
@@ -57,10 +60,12 @@ def f1(func):
                 pass
 
     return wrapper
+@f1
 def getcombo():
     fileo  = fd.askopenfile().name.replace('"','')
     return fileo
 
+@f1
 def password_limit(limit):
     try:
             os.mkdir(os.getcwd()+"\\results")
@@ -140,9 +145,6 @@ def capture_remover():
         
         for line in newc:
                 f.write(line.strip()+"\n")
-    end_time = time.time()
-    total = end_time - start_time
-    return total 
 '''
 CAPTURE_REMOVER DONE [FINISHED]
 '''
@@ -272,7 +274,6 @@ def password_extracor():
 @f1
 def shuffle():
     combo=getcombo()
-    start_time = time.time()
     try:
             os.mkdir(os.getcwd()+"\\results")
     except:
@@ -289,10 +290,7 @@ def shuffle():
     namy = '[SHUFFlED] {'+str(datetime.datetime.now())[:-7].replace(':','-')+'}.txt'
     with open(os.getcwd()+"\\results\\SHUFFLE_LIST\\"+namy,"a",encoding="utf-8",errors="ignore") as f:
         for line in listt:
-            f.write(line.strip()+"\n")
-    end_time = time.time()
-    total = end_time - start_time
-    return total 
+            f.write(line.strip()+"\n") 
 @f1
 def remove_dupes():
     combo=getcombo()
@@ -312,14 +310,10 @@ def remove_dupes():
     with open(os.getcwd()+"\\results\\REMOVE_DUPES\\"+namy,"a",encoding="utf-8",errors="ignore") as f:
         for line in nodupe:
             f.write(line.strip()+"\n")
-    end_time = time.time()
-    total = end_time - start_time
-    return total
 
 @f1
 def CLEANER():
     combo=getcombo()
-    start_time = time.time()
     try:
             os.mkdir(os.getcwd()+"\\results")
     except:
@@ -345,9 +339,6 @@ def CLEANER():
     with open(os.getcwd()+"\\results\\ALL_CLEANER\\"+namy,"a",encoding="utf-8",errors="ignore") as f:
         for line in nodupe:
             f.write(line.strip()+"\n")
-    end = time.time()
-    total = end- start_time
-    return total
 @f1
 def filter_combo_by_domain(domain):
         try:
@@ -389,7 +380,6 @@ def filter_combo_by_domain(domain):
 @f1
 def LQTOHQ():
     combo=getcombo()
-    start_time = time.time()
     try:
             os.mkdir(os.getcwd()+"\\results")
     except:
@@ -422,14 +412,10 @@ def LQTOHQ():
     namy = '[LQ to HQ] {'+str(datetime.datetime.now())[:-7].replace(':','-')+'}.txt'
     with open(os.getcwd()+"\\results\\LQTOHQ\\"+namy,"a",encoding="utf-8",errors="ignore")as f:
         for line in listt:
-            f.write(line.strip()+"\n")
-    end = time.time()
-    total = end - start_time
-    return total     
+            f.write(line.strip()+"\n")    
 @f1
 def get_pagetypes():
     filename=getcombo()
-    start_time = time.time()
     try:
             os.mkdir(os.getcwd()+"\\results")
     except:
@@ -455,13 +441,9 @@ def get_pagetypes():
             f.write(line.strip()+"\n")
     except:
             pass
-    end = time.time()
-    total = end - start_time
-    return total 
 @f1
 def get_pageformats():
     filename=getcombo()
-    start_time = time.time()
     try:
             os.mkdir(os.getcwd()+"\\results")
     except:
@@ -484,13 +466,9 @@ def get_pageformats():
         nodupe = listset(pageformats)
         for line in nodupe  :
             f.write(line.strip()+"\n")
-    end = time.time()
-    total = end - start_time
-    return total 
-@f1
+
 def EP_TO_UP():
     filename=getcombo()
-    start_time = time.time()
     try:
             os.mkdir(os.getcwd()+"\\results")
     except:
@@ -515,9 +493,7 @@ def EP_TO_UP():
         for line in newcombo:
             file.write(line.strip()+"\n")
 
-    end = time.time()
-    total = end - start_time
-    return total 
+
 @f1 
 def domain_sorter():
     filename=getcombo()
@@ -638,7 +614,7 @@ def check_domains():
         pass 
 import colorama
 
-
+@f1
 def lowercase_pass():
     newc=[]
     combo = getcombo()
@@ -663,6 +639,7 @@ def lowercase_pass():
         for line in newc:
             file.write(line.strip()+"\n")
 
+@f1
 def upper_password():
     newc=[]
     combo = getcombo()
@@ -686,7 +663,7 @@ def upper_password():
     with open(os.getcwd()+f"\\results\\UPPER_PASSWORD\\"+namey, "a",encoding="utf-8",errors="ignore") as file:
         for line in newc:
             file.write(line.strip()+"\n")
-
+@f1
 def add_prefix_to_password():
     newc=[]
     combo = getcombo()
@@ -712,7 +689,7 @@ def add_prefix_to_password():
         for line in newc:
             file.write(line.strip()+"\n")
 
-
+@f1
 def add_suffix_to_password():
     newc=[]
     combo = getcombo()
@@ -741,7 +718,7 @@ def add_suffix_to_password():
 
 
 
-
+@f1
 def Filter_urls():
     try:
             os.mkdir(os.getcwd()+"\\results")
@@ -841,7 +818,7 @@ def Filter_urls():
 
 
 
-
+@f1
 def SQL_SCANNER():
     start = time.time()
     os.system("cls")
@@ -901,24 +878,45 @@ def SQL_SCANNER():
         cpm = int(round((retries/TP)*60))
         PrintGradient("#00FFFF","#FF69B4",NAME)
         print(f""" 
-            {lightmagenta}     Checks:{retries}
-       {magenta} |MySql:             {MySQL}   |
-       {lightblue} |                       |
-        {blue}|MsSql:             {MsSQL}   |
-        {lightcyan}|                       |
-        {cyan}|PostGres:          {PostGRES}   |
-       {lightred} |                       |
-        {red}|Oracle:            {Oracle}   |
-        {green}|                       |  
-        {yellow}|MariaDb:           {MariaDb}   |
-        
-        {magenta}OVR:{sqls}         Errors:{Errorr}   
-                            TP:{TP}
-                            CPM:{cpm}     
+{lm}                                                  Checks:{retries}
+{ma}                                        [{res}MySql:             {MySQL}{ma}   ]
+{lb}                                        [                       ]
+{bl}                                        [{res}MsSql:             {MsSQL}{bl}   ]
+{cy}                                        [{res}PostGres:          {PostGRES}{cy}   ]
+{lr}                                        [                       ]
+{ree}                                        [{res}Oracle:            {Oracle} {ree}  ]
+{gr}                                        [                       ]  
+{ye}                                        [{res}MariaDb:           {MariaDb} {ye}  ]
+                                                                
+                                                        (Stats)
+{lm}                                               [Checks:    ({retries})]
+{ma}                                               [overall_sqls: ({sqls})]
+{bl}                                               [Cpm:           ({cpm})]
+{cy}                                               [Errors:     ({Errorr})]
+{lr}                                               [noDbs:       ({Nonee})]
+{ree}                                              [nothings:  ({nothing})]
 
 """)
     input("choice: ")
 
+def get_hwid():
+    # Get the CPU name and version
+    cpu_name = platform.processor()
+    cpu_version = platform.machine()
+
+    # Get the OS name and version
+    os_name = platform.system()
+    os_version = platform.release()
+
+    # Concatenate the CPU and OS information into a single string
+    hwid = f"{cpu_name} ({cpu_version}), {os_name} {os_version}"
+
+    # Return the HWID
+    return hwid
+
+
+            
+@f1
 def Join_multiple_combos():
     try:
             os.mkdir(os.getcwd()+"\\results")
@@ -947,155 +945,244 @@ def Join_multiple_combos():
             file.write(line.strip+"\n")
 
 
+
+@f1
+def get_pagetypes_from_urls():
+    try:
+            os.mkdir(os.getcwd()+"\\results")
+    except:
+            pass
+    try:
+            os.mkdir(os.getcwd()+"\\results\\PGT_FROM_URLS")
+    except:
+            pass
+    namy = '[Pagetypes-Urls] {'+str(datetime.datetime.now())[:-7].replace(':','-')+'}.txt'
+    combo=getcombo()
+    def redupe(litss):
+        nodupe = listset(litss)
+        return nodupe
+    PageTypes = []
+    with open(combo,"r",encoding = "utf-8",errors="ignore") as urls:
+        for line in urls.readlines():
+            string = line
+            match = re.search(r"([^\/\.]*)\.([^\/.]*|[^\/.]*\.|gov\.rw|com\.au|add\.YourOwnDommainExtentionsHereIfItHasMultipleDots|co\.za|ca\.us)\/[^\.]*[^\/]*\.([a-zA-Z1-9]*)\?([^=&]*)=",string)
+
+            if match:
+                pre  = match.group()
+
+                string = pre 
+
+                match = re.search(r"\?(.*)", string)
+
+                if match:
+                    query_string = match.group(1)
+                    if len(query_string) >2: 
+                        PageTypes.append(query_string)
+                    else:
+                        pass 
+    pagetypes = redupe(PageTypes)
+    with open(os.getcwd()+"\\results\\PGT_FROM_URLS\\"+namy,'a',encoding='utf8',errors='ignore') as file:
+        for line in pagetypes:
+            file.write(str(line).strip()+"\n")
+
+
+@f1
+def HASH(password):
+    """
+    Hashes the given password using the SHA-256 algorithm   
+    """
+    hashed_password = hashlib.sha256(str(password).encode()).hexdigest()
+    return hashed_password
+
+def login(username, password,HWID):
+    req = requests.get(f"{website}"+f'login/{username}/{password}/{HWID}')
+    data = req.json()
+    status = data["status"]
+    if status == True:
+        return True
+    else:
+        return False
+
+
+def register(email, username, password,key,HWID):
+    req = requests.get(f"{website}"+f"register/{key}/{email}/{username}/{password}/{HWID}")
+    data = req.json()
+    status = data["status"]
+    if status == True:
+        return True
+    else:
+        return False
+
+def RESETHWID(email, password, HWID):
+    req = requests.get(f"{website}"+f"resethwid/{email}/{password}/{HWID}")
+    data = req.json()
+    status = data["status"]
+    if status == True:
+        return True
+    else:
+        return False
     
 
+@f1
 def auth():
+    os.system("cls")
     PrintGradient("#00FFFF","#FF69B4",NAME)
     print('\n\n')
     print("[1] Login")
     print("[2] Register")
     print("[3] reset Hwid")
-    input(": ")
-    return True
-auth_status = auth()
-if auth_status == True:
-    while True:
-        os.system("cls")
-        print("                                     ",end="")
-        PrintGradient("#00FFFF","#FF69B4",NAME)
-        ctypes.windll.kernel32.SetConsoleTitleW("|GOAT-EDITOR|   |MODULE|:(Main-Menu)")
-        print("\n")
-        print("[1] Password Edits")
-        print("[2] Email Edits")
-        print("[3] Combo Edits")
-        print("[4] Dorking")
-        print("[5] Parsers")
-        print("[6] Credits")
-        Choicee = input("\n Choice: ")
-        if Choicee == "1":
-            os.system("cls")
-            PrintGradient("#00FFFF","#FF69B4",NAME)
-            ctypes.windll.kernel32.SetConsoleTitleW("|GOAT-EDITOR|   |MODULE|:(Password-Edits)")
-            print("[1] password_limit")
-            print("[2] Password hex")
-            print("[3] Password extractor")
-            print("[4] lowercase password")
-            print("[5] uppercase password")
-            print("[6] add prefix to password")
-            print("[7] add suffix to password")
-            print("[99] Main Menu")
-            choice = input("Choice: ")
-            if choice == "1":
-                limit = input("limit EX[4,5,6,7]: ")
-                password_limit(limit)
-            elif choice == "2":
-                hex = input("HEX EX[#,$,*]: ")
-                password_hex(hex)
-            elif choice == "3":
-                password_extracor()
-            elif choice == "4":
-                lowercase_pass()
-            elif choice == "5":
-                upper_password()
-            elif choice == "6":
-                add_prefix_to_password()
-            elif choice == "7":
-                add_prefix_to_password()
-            elif choice == "99":
-                pass  
-        
-        elif Choicee == "2":
-            os.system("cls")
-            PrintGradient("#00FFFF","#FF69B4",NAME)
-            ctypes.windll.kernel32.SetConsoleTitleW("|GOAT-EDITOR|   |MODULE|:(Email-Edits)")
-            print("[1] Domain changer")
-            print("[2] Email extractor")
-            print("[3] filter combo by domain")
-            print("[4] Email:pass to user:pass")
-            print("[5] Domain sorter")
-            print("[6] check domains")
-            print("[7] remove numbers from emails")
-            print("[99] Main Menu")
-            choice = input("Choice: ")
-            if choice == "1":
-                dom = input("Domain Ex(@gmail.com): ")
-                domain_changer(dom)
-            elif choice == "2":
-                email_extracor()
-            elif choice == "3":
-                domain = input("Domain without(@): ")
-                filter_combo_by_domain(domain)
-            elif choice == "4":
-                EP_TO_UP()
-            elif choice == "5":
-                domain_sorter()
-            elif choice == "6":
-                check_domains()
-            elif choice == "99":
-                pass 
-        elif Choicee == "3":
-            os.system("cls")
-            PrintGradient("#00FFFF","#FF69B4",NAME)
-            
-            ctypes.windll.kernel32.SetConsoleTitleW("|GOAT-EDITOR|   |MODULE|:(Combo-Edits)")
-            print("[1] Combo cleaner")
-            print("[2] reverser")
-            print("[3] combo sorter")
-            print("[4] shuffle")
-            print("[5] redupe")
-            print("[6] LQ TO HQ")
-            print("[7] Join Multiple Combos Together")
-            print("[99] Main Menu")
-            choice = input("Choice: ")
-            if choice == "1":
-                CLEANER()
-            elif choice == "2":
-                reverser()
-            elif choice == "3":
-                combo_sorter()
-            elif choice == "4":
-                shuffle()
-            elif choice == "5":
-                remove_dupes()
-            elif choice == "6":
-                LQTOHQ()
-            elif choice == "7":
-                Join_multiple_combos()
-            elif choice == "99":
-                pass  
-            
-        elif Choicee == "4":
-            os.system("cls")
-            PrintGradient("#00FFFF","#FF69B4",NAME)
-            ctypes.windll.kernel32.SetConsoleTitleW("|GOAT-EDITOR|   |MODULE|:(Dorking)")
-            print("[1] scrape Pagetypes")
-            print("[2] scrape Pageformats")
-            print("[3] filter URls")
-            print("[4] SQl Scanner")
-            print("[99] Main Menu")
-            Choice = input("Choice: ")
-            if Choice== "1":
-                get_pagetypes()
-            elif Choice == "2":
-                get_pageformats()
-            elif Choice == "3":
-                Filter_urls()
-            elif Choice == "4":
-                SQL_SCANNER()
-            elif Choice == "99":
-                pass 
-        elif Choicee == "6":
-            os.system("cls")
-            print(f"""
+    resp = input(": ")
+    if resp == "3":
+        RESETHWID(email=input("email: "),password=input("password: "),HWID=get_hwid())
+    if resp == "2":
+        register(key=input("REGISTER-KEY: "),email=input("email: "),username=input("username: "),password=input("password: "),HWID=get_hwid())
+    if resp == "1":
+        response = login(username=input("username: "),password=input("password: "),HWID=get_hwid())
+        print(response)
+        time.sleep(2)
+        if response == True:
+            while True:
+                os.system("cls")
+                print("                                     ",end="")
+                PrintGradient("#00FFFF","#FF69B4",NAME)
+                ctypes.windll.kernel32.SetConsoleTitleW("|GOAT-EDITOR|   |MODULE|:(Main-Menu)")
+                print("\n")
+                print("[1] Password Edits")
+                print("[2] Email Edits")
+                print("[3] Combo Edits")
+                print("[4] Dorking")
+                print("[5] Parsers")
+                print("[6] Credits")
+                Choicee = input("\n Choice: ")
+                if Choicee == "1":
+                    os.system("cls")
+                    PrintGradient("#00FFFF","#FF69B4",NAME)
+                    ctypes.windll.kernel32.SetConsoleTitleW("|GOAT-EDITOR|   |MODULE|:(Password-Edits)")
+                    print("[1] password_limit")
+                    print("[2] Password hex")
+                    print("[3] Password extractor")
+                    print("[4] lowercase password")
+                    print("[5] uppercase password")
+                    print("[6] add prefix to password")
+                    print("[7] add suffix to password")
+                    print("[99] Main Menu")
+                    choice = input("Choice: ")
+                    if choice == "1":
+                        limit = input("limit EX[4,5,6,7]: ")
+                        password_limit(limit)
+                    elif choice == "2":
+                        hex = input("HEX EX[#,$,*]: ")
+                        password_hex(hex)
+                    elif choice == "3":
+                        password_extracor()
+                    elif choice == "4":
+                        lowercase_pass()
+                    elif choice == "5":
+                        upper_password()
+                    elif choice == "6":
+                        add_prefix_to_password()
+                    elif choice == "7":
+                        add_prefix_to_password()
+                    elif choice == "99":
+                        pass  
+                
+                elif Choicee == "2":
+                    os.system("cls")
+                    PrintGradient("#00FFFF","#FF69B4",NAME)
+                    ctypes.windll.kernel32.SetConsoleTitleW("|GOAT-EDITOR|   |MODULE|:(Email-Edits)")
+                    print("[1] Domain changer")
+                    print("[2] Email extractor")
+                    print("[3] filter combo by domain")
+                    print("[4] Email:pass to user:pass")
+                    print("[5] Domain sorter")
+                    print("[6] check domains")
+                    print("[7] remove numbers from emails")
+                    print("[99] Main Menu")
+                    choice = input("Choice: ")
+                    if choice == "1":
+                        dom = input("Domain Ex(@gmail.com): ")
+                        domain_changer(dom)
+                    elif choice == "2":
+                        email_extracor()
+                    elif choice == "3":
+                        domain = input("Domain without(@): ")
+                        filter_combo_by_domain(domain)
+                    elif choice == "4":
+                        EP_TO_UP()
+                    elif choice == "5":
+                        domain_sorter()
+                    elif choice == "6":
+                        check_domains()
+                    elif choice == "99":
+                        pass 
+                elif Choicee == "3":
+                    os.system("cls")
+                    PrintGradient("#00FFFF","#FF69B4",NAME)
+                    
+                    ctypes.windll.kernel32.SetConsoleTitleW("|GOAT-EDITOR|   |MODULE|:(Combo-Edits)")
+                    print("[1] Combo cleaner")
+                    print("[2] reverser")
+                    print("[3] combo sorter")
+                    print("[4] shuffle")
+                    print("[5] redupe")
+                    print("[6] LQ TO HQ")
+                    print("[7] Join Multiple Combos Together")
+                    print("[99] Main Menu")
+                    choice = input("Choice: ")
+                    if choice == "1":
+                        CLEANER()
+                    elif choice == "2":
+                        reverser()
+                    elif choice == "3":
+                        combo_sorter()
+                    elif choice == "4":
+                        shuffle()
+                    elif choice == "5":
+                        remove_dupes()
+                    elif choice == "6":
+                        LQTOHQ()
+                    elif choice == "7":
+                        Join_multiple_combos()
+                    elif choice == "99":
+                        pass  
+                    
+                elif Choicee == "4":
+                    os.system("cls")
+                    PrintGradient("#00FFFF","#FF69B4",NAME)
+                    ctypes.windll.kernel32.SetConsoleTitleW("|GOAT-EDITOR|   |MODULE|:(Dorking)")
+                    print("[1] scrape Pagetypes")
+                    print("[2] scrape Pageformats")
+                    print("[3] filter URls")
+                    print("[4] SQl Scanner")
+                    print("[5] Get Parameters from Url")
+                    print("[99] Main Menu")
+                    Choice = input("Choice: ")
+                    if Choice== "1":
+                        get_pagetypes()
+                    elif Choice == "2":
+                        get_pageformats()
+                    elif Choice == "3":
+                        Filter_urls()
+                    elif Choice == "4":
+                        SQL_SCANNER()
+                    elif Choice == "5":
+                        get_pagetypes_from_urls()
+                    elif Choice == "99":
+                        pass 
+                elif Choicee == "6":
+                    os.system("cls")
+                    print(f"""
+                                    +-----------------------------------------------------------------------------------------------------------------------------------+
+                                {ma} IQTHEGOAT#0310: the main devoloper of the tool worked on [pass edits , mail edits , combo edits, dork skidder, sql scanner]\n      
+                                {ree}  KillinMachine#2570: used some of his code on the parsers [BIG THANKS TO HIM FOR LETTING ME TO USE HIS PARSERS CODE IN MY PROJECT]\n
+                                {gr}  @! Y1ZOX7#9758: worked on the design and fixed the parsers                                                                       \n
+                    """)  
 
-
-
-                            +-----------------------------------------------------------------------------------------------------------------------------------+
-                           {magenta} IQTHEGOAT#0310: the main devoloper of the tool worked on [pass edits , mail edits , combo edits, dork skidder, sql scanner]\n      
-                          {red}  KillinMachine#2570: used some of his code on the parsers [BIG THANKS TO HIM FOR LETTING ME TO USE HIS PARSERS CODE IN MY PROJECT]\n
-                          {green}  @! Y1ZOX7#9758: worked on the design and fixed the parsers                                                                       \n
-            """)  
-
-        input("\n\n:")
-
-        
+                input("\n\n:")
+        else:
+            print("[!] Invalid Choice")
+            print("[!] Please try again")
+            time.sleep(0.5)
+                    
+while True:
+    auth()  
