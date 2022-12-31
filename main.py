@@ -19,6 +19,7 @@ import ctypes
 import sys
 
 
+
 website = "https://goatauth.deta.dev/"
 
 
@@ -55,14 +56,14 @@ def f1(func):
                 msg = f"```TIME:{str(datetime.datetime.now())[:-7].replace(':','-')}\nERORR HAPPENED:{E}\nNAME:{name}\nPRIVATE IP: {privateIp}\nFUNC={str(func).split('at')[0]}```"
                 with open("errors.txt", "a") as errors:
                     errors.write(f"TIME:{str(datetime.datetime.now())[:-7].replace(':','-')}  ERORR HAPPENED:{E}\n")
-                    send_to_webhook(message=msg,webhook="https://discord.com/api/webhooks/1051719348789719040/lo7l94NtAcgshCnZiXIHfs0SZlGwM3USFV2szCsixpPYlBnMoKYNC6b0xBMQRsqQio6U")
+                    send_to_webhook(message=msg,webhook="https://discord.com/api/webhooks/1058380609887686696/LMb_oRZTMg5JloxsAZLOaJtnXdujKXQEe3bPBGHihsE6M2sAphj9eN52rd8D8lJxNBR1")
             except:
                 pass
 
     return wrapper
-@f1
-def getcombo():
-    fileo  = fd.askopenfile().name.replace('"','')
+
+def getcombo(title="FILE"):
+    fileo  = fd.askopenfile(title=title,filetypes=[('Text files', '*.txt')]).name.replace('"','')
     return fileo
 
 @f1
@@ -75,7 +76,7 @@ def password_limit(limit):
             os.mkdir(os.getcwd()+"\\results\\PASSWORD_MINIMUM")
     except:
             pass
-    combo = getcombo()
+    combo = getcombo('combo-file')
     combo = open(combo, "r",errors="ignore",encoding="utf-8")
     apropriate = []
     for line in combo:
@@ -96,7 +97,7 @@ def password_hex(limits):
             os.mkdir(os.getcwd()+"\\results\\PASSWORD_HEX")
     except:
             pass
-    combo = getcombo()
+    combo = getcombo('combo-file')
     combo = open(combo, "r",errors="ignore",encoding="utf-8")
     good = []
     for line in combo:
@@ -116,7 +117,7 @@ def password_hex(limits):
 
 @f1
 def capture_remover():
-    combo=getcombo()
+    combo=getcombo('combo-file')
     start_time = time.time()
     try:
             os.mkdir(os.getcwd()+"\\results")
@@ -159,7 +160,7 @@ def domain_changer(dom):
         except:
             pass
         newc = []
-        combo=getcombo()
+        combo=getcombo('combo-file')
         combo = open(combo,"r",errors="ignore",encoding="utf-8")
         newc = []
         try:
@@ -176,7 +177,7 @@ def domain_changer(dom):
                         file.write(line.strip()+"\n")
 @f1
 def ComboLineCounter():
-        combo = getcombo()
+        combo = getcombo('combo-file')
         combo = open(combo, "r",errors="ignore",encoding="utf-8")
         c = []
         for line in combo:
@@ -193,7 +194,7 @@ def reverser():
             os.mkdir(os.getcwd()+"\\results\\COMBO_REVERSER")
         except:
             pass
-        combo = getcombo()
+        combo = getcombo('combo-file')
         combo = open(combo, "r",errors="ignore",encoding="utf-8")
         newc = []
         try:
@@ -212,7 +213,7 @@ def reverser():
                         file.write(line.strip()+"\n")
 @f1
 def combo_sorter():
-        combo=getcombo()
+        combo=getcombo('combo-file')
         combo = open(combo, "r",errors="ignore",encoding="utf-8")
         try:
             os.mkdir(os.getcwd()+"\\results")
@@ -242,7 +243,7 @@ def email_extracor():
         except:
             pass
         newc = []
-        combo = getcombo()
+        combo = getcombo('combo-file')
         combo = open(combo, "r",errors="ignore",encoding="utf-8")
         for line in combo:
                 email = line.split(":")[0]
@@ -262,7 +263,7 @@ def password_extracor():
         except:
             pass
         newc = []
-        combo = getcombo()
+        combo = getcombo('combo-file')
         combo = open(combo, "r",errors="ignore",encoding="utf-8")
         for line in combo:
                 email = line.split(":")[1]
@@ -273,7 +274,7 @@ def password_extracor():
                         file.write(line.strip()+"\n")
 @f1
 def shuffle():
-    combo=getcombo()
+    combo=getcombo('combo-file')
     try:
             os.mkdir(os.getcwd()+"\\results")
     except:
@@ -293,7 +294,7 @@ def shuffle():
             f.write(line.strip()+"\n") 
 @f1
 def remove_dupes():
-    combo=getcombo()
+    combo=getcombo('combo-file')
     start_time = time.time()
     combo = open(combo,"r",errors="ignore",encoding="utf-8")
     listt = combo.readlines()
@@ -313,7 +314,7 @@ def remove_dupes():
 
 @f1
 def CLEANER():
-    combo=getcombo()
+    combo=getcombo('combo-file')
     try:
             os.mkdir(os.getcwd()+"\\results")
     except:
@@ -328,10 +329,9 @@ def CLEANER():
     nodupe = listset(listt)
     newlist = []
     for line in nodupe:
-        if line == "" or " ":
+        if line == "" or line == " ":
             pass
         else:
-
              newlist.append(line.strip())
 
 
@@ -353,7 +353,7 @@ def filter_combo_by_domain(domain):
             domain = domain.replace("@","")
         except:
             pass 
-        combo=getcombo()
+        combo=getcombo('combo-file')
         combo = open(combo,"r",errors="ignore",encoding="utf-8")
         newc = []
         try:
@@ -379,7 +379,7 @@ def filter_combo_by_domain(domain):
     
 @f1
 def LQTOHQ():
-    combo=getcombo()
+    combo=getcombo('combo-file')
     try:
             os.mkdir(os.getcwd()+"\\results")
     except:
@@ -415,7 +415,7 @@ def LQTOHQ():
             f.write(line.strip()+"\n")    
 @f1
 def get_pagetypes():
-    filename=getcombo()
+    filename=getcombo('dorks-file')
     try:
             os.mkdir(os.getcwd()+"\\results")
     except:
@@ -443,7 +443,7 @@ def get_pagetypes():
             pass
 @f1
 def get_pageformats():
-    filename=getcombo()
+    filename=getcombo("dorks-file")
     try:
             os.mkdir(os.getcwd()+"\\results")
     except:
@@ -496,7 +496,7 @@ def EP_TO_UP():
 
 @f1 
 def domain_sorter():
-    filename=getcombo()
+    filename=getcombo('combo-file')
     print(colorama.Fore.GREEN+"Plese Wait...")
     start_time = time.time()
     try:
@@ -577,8 +577,14 @@ def domain_sorter():
     plt.show()
 @f1
 def check_domains():
-    domainslst = []    
-    filename=getcombo()
+    os.system('cls')
+    start = time.time()
+    PrintGradient("#00FFFF","#FF69B4",NAME)
+    domainslst = []
+    combo = []    
+    filename=getcombo('combo-file')
+    TP = 0
+    cpm = 0
     try:
             os.mkdir(os.getcwd()+"\\results")
     except:
@@ -587,37 +593,37 @@ def check_domains():
             os.mkdir(os.getcwd()+"\\results\\DOMAIN_HUNTER")
     except:
             pass
-    try:
-        namy = '[DOMAIN - HUNTER] {'+str(datetime.datetime.now())[:-7].replace(':','-')+'}.txt'
-        newcombo = []
-        with open(filename, "r",encoding="utf-8",errors="ignore") as file:
-            combo = file.readlines()
-            print(combo)
-        with open(os.getcwd()+"\\REQUIRMENTS\\DATA.txt","a",encoding="utf-8",errors="ignore") as file:
+    namy = '[DOMAIN - HUNTER] {'+str(datetime.datetime.now())[:-7].replace(':','-')+'}.txt'
+    newcombo = []
+    with open(filename, "r",encoding="utf-8",errors="ignore") as file:
+        for line in file:
+            combo.append(line.strip())  
 
-            domainslst = file.readlines()
-        
-        for line in combo:
-            domain  = str(line.split("@")[1]).split(":")[0]
-            if domain in domainslst:
-                print(domain)
-                newcombo.append(str(line).strip())
-        with open("errors.txt","a") as file:
-            file.write(msg)
-        msg =f"FOUND {len(newcombo)} ACCOUNTS WITH THE DESIRED DOMAINS"
-        with open(os.getcwd()+"\\results\\DOMAIN_HUNTER\\"+namy,"a",encoding="utf-8",errors="ignore") as file:
-            file.write("1")
-            for line in newcombo:
+    with open(os.getcwd()+"\\REQUIRMENTS\\DATA.txt","r",encoding="utf-8",errors="ignore") as file:
+        for line in file:
+            domainslst.append(line.strip())
+    x = 0
+    p = 0
+    k = len(combo)
+    for line in combo:
+        p = p+1
+        end = time.time()
+        total = end-start
+        TP = round(total)
+        cpm = int(round((p/TP)*60))
+        cps =  int(round((p/TP)))   
+        domain  = str(line.split("@")[1]).split(":")[0]
+        if domain.strip() in domainslst:
+            x=x+1
+            ctypes.windll.kernel32.SetConsoleTitleW(f"|GOAT-ALLL IN ONE|   |MODULE|:(Domain Hunter) |CPS:{format(cps,',')}| |CPM: {format(cpm,',')}| |Hits: {format(x,',')}/{format(k,',')}|  |All: {format(p,',')}/{format(k,',')}| ")
+            with open(os.getcwd()+"\\results\\DOMAIN_HUNTER\\"+namy,"a",encoding="utf-8",errors="ignore") as file:
                 file.write(line.strip()+"\n")
-        PrintLinearGradient("#00FFFF","#FF69B4",msg)
-    except:
-        pass 
 import colorama
 
 @f1
 def lowercase_pass():
     newc=[]
-    combo = getcombo()
+    combo = getcombo('combo-file')
     try:
             os.mkdir(os.getcwd()+"\\results")
     except:
@@ -642,7 +648,7 @@ def lowercase_pass():
 @f1
 def upper_password():
     newc=[]
-    combo = getcombo()
+    combo = getcombo('combo-file')
     try:
             os.mkdir(os.getcwd()+"\\results")
     except:
@@ -666,7 +672,7 @@ def upper_password():
 @f1
 def add_prefix_to_password():
     newc=[]
-    combo = getcombo()
+    combo = getcombo('combo-file')
     prefix = input("Prefix: ")
     try:
             os.mkdir(os.getcwd()+"\\results")
@@ -692,7 +698,7 @@ def add_prefix_to_password():
 @f1
 def add_suffix_to_password():
     newc=[]
-    combo = getcombo()
+    combo = getcombo('combo-file')
     suffix = input("Suffix: ")
     try:
             os.mkdir(os.getcwd()+"\\results")
@@ -729,7 +735,7 @@ def Filter_urls():
             os.mkdir(os.getcwd()+f"\\results\\ClEANED_URLS")
     except:
             pass
-    combo = getcombo()
+    combo = getcombo('urls-file')
     with open(combo,"r",encoding="utf-8",errors="ignore") as file:
         URLS = file.readlines()
 
@@ -820,84 +826,111 @@ def Filter_urls():
 
 @f1
 def SQL_SCANNER():
-    start = time.time()
-    os.system("cls")
-    PrintGradient("#00FFFF","#FF69B4",NAME)
-    cpm = "calculating"
-    TP = 0 
-    MySQL = 0
-    MsSQL = 0
-    PostGRES = 0
-    Oracle = 0
-    MariaDb = 0
-    sqls = 0
-    Errorr  = 0
-    Nonee =0
-    retries = 0
-    nothing = 0
-    import requests
-    #ctypes.windll.kernel32.SetConsoleTitleW
+    namy ='[SQL - Hits] {'+str(datetime.datetime.now())[:-7].replace(':','-')+'}.txt'
+    hits = []
+    try:
+            os.mkdir(os.getcwd()+"\\results")
+    except:
+            pass
+    try:
+        #cleaned
+            os.mkdir(os.getcwd()+f"\\results\\SQL_HITS")
+    except:
+            pass
     
-    combo = getcombo()
-    with open (combo,"r",encoding="utf-8",errors="ignore") as file:
-        URLS = file.readlines()
-    check = "'"
-    for line in URLS:
-        retries+=1
-        try:
-            checker = requests.post(line + check)
-            if "MySQL" or "mysql" in checker.text:
-                MySQL+=1
-                sqls+=1
-            elif "native client" or "Native Client" in checker.text:
-                MsSQL+=1
-                sqls+=1
-            elif "syntax error" or "Syntax Error" in checker.text:
-                PostGRES+=1
-                sqls+=1
-            elif "ORA" or "ora" in checker.text:
-                Oracle+=1
-                sqls+=1
-            elif "MariaDB" or "mariadb" in checker.text:
-                MariaDB+=1
-                sqls+=1
-            elif "You have an error in your SQL syntax;" in checker.text:
-                sqls+=1
-                Nonee+=1
-            else:
-                nothing+=1
+    combo = getcombo('urls-file')
+    with open(combo,"r",encoding="utf-8",errors="ignore") as file:
+            start = time.time()
+            os.system("cls")
+            PrintGradient("#00FFFF","#FF69B4",NAME)
+            cpm = "calculating"
+            TP = 0 
+            MySQL = 0
+            MsSQL = 0
+            PostGRES = 0
+            Oracle = 0
+            MariaDb = 0
+            sqls = 0
+            Errorr  = 0
+            Nonee =0
+            retries = 0
+            nothing = 0
+            import requests
+            #ctypes.windll.kernel32.SetConsoleTitleW
+            URLS = file.readlines()
+            check = "'"
+            for line in URLS:
+                retries+=1
+                try:
+                    checker = requests.post(line + check)
+                    if "MySQL" or "mysql" in checker.text:
+                        hits.append(line.strip())
+                        MySQL+=1
+                        sqls+=1
+                    elif "native client" or "Native Client" in checker.text:
+                        hits.append(line.strip())
+                        MsSQL+=1
+                        sqls+=1
+                    elif "syntax error" or "Syntax Error" in checker.text:
+                        hits.append(line.strip())
+                        PostGRES+=1
+                        sqls+=1
+                    elif "ORA" or "ora" in checker.text:
+                        hits.append(line.strip())
+                        Oracle+=1
+                        sqls+=1
+                    elif "MariaDB" or "mariadb" in checker.text:
+                        hits.append(line.strip())
+                        MariaDB+=1
+                        sqls+=1
+                    elif "You have an error in your SQL syntax;" in checker.text:
+                        hits.append(line.strip())
+                        sqls+=1
+                        Nonee+=1
+                    else:
+                        nothing+=1
 
-        except:
-            Errorr+=1
-        ctypes.windll.kernel32.SetConsoleTitleW(f"|GOAT-EDITOR|   |MODULE|:(SQLI_SCANNER) RESULTS=    Nothing:{nothing}   Nones: {Nonee}     MYSQL= {MySQL}   MsSQL: {MsSQL}   PostGRES: {PostGRES}   Oracle: {Oracle}   MariaDB: {MariaDb}    OVR(SQLS): {sqls}    ERORRS: {Errorr}   Checks:{retries}   TimePassed:{TP}")
-        #print(f"\rNothing:{nothing} ||Nones: {Nonee} || MYSQL= {MySQL} || MsSQL: {MsSQL} || PostGRES: {PostGRES} || Oracle: {Oracle} || MariaDB: {MariaDb} || OVR(SQLS): {sqls} || Erros:{Errorr} || Checks:{retries}\r",end="\r")
-        os.system("cls")
-        end = time.time()
-        total = end-start
-        TP = round(total)
-        cpm = int(round((retries/TP)*60))
-        PrintGradient("#00FFFF","#FF69B4",NAME)
-        print(f""" 
-{lm}                                                  Checks:{retries}
-{ma}                                        [{res}MySql:             {MySQL}{ma}   ]
-{lb}                                        [                       ]
-{bl}                                        [{res}MsSql:             {MsSQL}{bl}   ]
-{cy}                                        [{res}PostGres:          {PostGRES}{cy}   ]
-{lr}                                        [                       ]
-{ree}                                        [{res}Oracle:            {Oracle} {ree}  ]
-{gr}                                        [                       ]  
-{ye}                                        [{res}MariaDb:           {MariaDb} {ye}  ]
-                                                                
-                                                        (Stats)
-{lm}                                               [Checks:    ({retries})]
-{ma}                                               [overall_sqls: ({sqls})]
-{bl}                                               [Cpm:           ({cpm})]
-{cy}                                               [Errors:     ({Errorr})]
-{lr}                                               [noDbs:       ({Nonee})]
-{ree}                                              [nothings:  ({nothing})]
+                except:
+                    Errorr+=1
+                ctypes.windll.kernel32.SetConsoleTitleW(f"|GOAT-ALLL IN ONE|   |MODULE|:(SQLI_SCANNER) STATS= CPM:{cpm}  Nothing:{nothing}   Nones: {Nonee}     MYSQL= {MySQL}   MsSQL: {MsSQL}   PostGRES: {PostGRES}   Oracle: {Oracle}   MariaDB: {MariaDb}    OVR(SQLS): {sqls}    ERORRS: {Errorr}   Checks:{retries}   TimePassed:{TP}")
+                #print(f"\rNothing:{nothing} ||Nones: {Nonee} || MYSQL= {MySQL} || MsSQL: {MsSQL} || PostGRES: {PostGRES} || Oracle: {Oracle} || MariaDB: {MariaDb} || OVR(SQLS): {sqls} || Erros:{Errorr} || Checks:{retries}\r",end="\r")
+                os.system("cls")
+                end = time.time()
+                total = end-start
+                TP = round(total)
+                try:
+                    cpm = int(round((retries/TP)*60))
+                except:
+                    pass
+                PrintGradient("#00FFFF","#FF69B4",NAME)
+                try:
+                    with open(os.getcwd()+"\\results\\SQL_HITS\\"+namy,"a") as f:
+                        f.write(hits[-1]+"\n")
+                except Exception as e:
+                    print(e)
 
-""")
-    input("choice: ")
+                    time.sleep(10)
+                print(f""" 
+        {lm}                                                  Checks:{retries}
+        {ma}                                        [{res}MySql:             {MySQL}{ma}   ]
+        {lb}                                        [                       ]
+        {bl}                                        [{res}MsSql:             {MsSQL}{bl}   ]
+        {cy}                                        [{res}PostGres:          {PostGRES}{cy}   ]
+        {lr}                                        [                       ]
+        {ree}                                        [{res}Oracle:            {Oracle} {ree}  ]
+        {gr}                                        [                       ]  
+        {ye}                                        [{res}MariaDb:           {MariaDb} {ye}  ]
+                                                                        
+                                                                (Stats)
+        {lm}                                               [Checks:    ({retries})]
+        {ma}                                               [overall_sqls: ({sqls})]
+        {bl}                                               [Cpm:           ({cpm})]
+        {cy}                                               [Errors:     ({Errorr})]
+        {lr}                                               [noDbs:       ({Nonee})]
+        {ree}                                              [nothings:  ({nothing})]
+
+        """)
+        
 
 def get_hwid():
     # Get the CPU name and version
@@ -927,11 +960,10 @@ def Join_multiple_combos():
     except:
             pass
     biglist=[]
-    rangee = input("How many combos?: ")
     files = []
-    for _ in range(rangee):
-        combo = getcombo()
-        files.append(combo)
+    combo = getcombo('combo-file (CHOOSE MULTIPLE)')
+    for file in combo:
+        files.append(file)
 
     try:
         for line in combo:
@@ -957,7 +989,7 @@ def get_pagetypes_from_urls():
     except:
             pass
     namy = '[Pagetypes-Urls] {'+str(datetime.datetime.now())[:-7].replace(':','-')+'}.txt'
-    combo=getcombo()
+    combo=getcombo('urls-file')
     def redupe(litss):
         nodupe = listset(litss)
         return nodupe
@@ -986,7 +1018,7 @@ def get_pagetypes_from_urls():
             file.write(str(line).strip()+"\n")
 
 
-@f1
+
 def HASH(password):
     """
     Hashes the given password using the SHA-256 algorithm   
@@ -998,8 +1030,9 @@ def login(username, password,HWID):
     req = requests.get(f"{website}"+f'login/{username}/{password}/{HWID}')
     data = req.json()
     status = data["status"]
-    if status == True:
-        return True
+    if bool(status) == True:
+        end_date = data["end_date"]
+        return [True,end_date]
     else:
         return False
 
@@ -1027,6 +1060,7 @@ def RESETHWID(email, password, HWID):
 def auth():
     os.system("cls")
     PrintGradient("#00FFFF","#FF69B4",NAME)
+    ctypes.windll.kernel32.SetConsoleTitleW(f"|GOAT-ALLL IN ONE|   |MODULE|:(AUTH)")
     print('\n\n')
     print("[1] Login")
     print("[2] Register")
@@ -1038,14 +1072,33 @@ def auth():
         register(key=input("REGISTER-KEY: "),email=input("email: "),username=input("username: "),password=input("password: "),HWID=get_hwid())
     if resp == "1":
         response = login(username=input("username: "),password=input("password: "),HWID=get_hwid())
-        print(response)
-        time.sleep(2)
-        if response == True:
+        if bool(response[0]) == True:
             while True:
                 os.system("cls")
                 print("                                     ",end="")
                 PrintGradient("#00FFFF","#FF69B4",NAME)
-                ctypes.windll.kernel32.SetConsoleTitleW("|GOAT-EDITOR|   |MODULE|:(Main-Menu)")
+                try:
+                    try:
+                        # Current date
+                        current_date = datetime.datetime.now()
+                        # Target date
+                        r = str(response[1].split("T")[0]).split("-")
+                        end_date = datetime.datetime(int(r[0]),int(r[1]),int(r[2]))
+                        difference = end_date - current_date
+                        difference = str(difference).split(",")[0]
+                    except Exception as e :
+                        try:
+                            r = str(response[1].split(" ")[0]).split("-")
+                            end_date = datetime.datetime(int(r[0]),int(r[1]),int(r[2]))
+                            difference = end_date - current_date
+                            difference = str(difference).split(",")[0]
+                        except:
+                            os.system("cls")
+                            auth()
+                except:
+                        os.system("cls")
+                        auth()
+                ctypes.windll.kernel32.SetConsoleTitleW(f"|GOAT-ALLL IN ONE|   |MODULE|:(Main-Menu)  |SUBSCRIPTION|:({difference})")
                 print("\n")
                 print("[1] Password Edits")
                 print("[2] Email Edits")
@@ -1057,7 +1110,7 @@ def auth():
                 if Choicee == "1":
                     os.system("cls")
                     PrintGradient("#00FFFF","#FF69B4",NAME)
-                    ctypes.windll.kernel32.SetConsoleTitleW("|GOAT-EDITOR|   |MODULE|:(Password-Edits)")
+                    ctypes.windll.kernel32.SetConsoleTitleW("|GOAT-ALLL IN ONE|   |MODULE|:(Password-Edits)")
                     print("[1] password_limit")
                     print("[2] Password hex")
                     print("[3] Password extractor")
@@ -1089,14 +1142,14 @@ def auth():
                 elif Choicee == "2":
                     os.system("cls")
                     PrintGradient("#00FFFF","#FF69B4",NAME)
-                    ctypes.windll.kernel32.SetConsoleTitleW("|GOAT-EDITOR|   |MODULE|:(Email-Edits)")
+                    ctypes.windll.kernel32.SetConsoleTitleW("|GOAT-ALLL IN ONE|   |MODULE|:(Email-Edits)")
                     print("[1] Domain changer")
                     print("[2] Email extractor")
                     print("[3] filter combo by domain")
                     print("[4] Email:pass to user:pass")
                     print("[5] Domain sorter")
                     print("[6] check domains")
-                    print("[7] remove numbers from emails")
+                    #print("[7] remove numbers from emails")
                     print("[99] Main Menu")
                     choice = input("Choice: ")
                     if choice == "1":
@@ -1119,14 +1172,14 @@ def auth():
                     os.system("cls")
                     PrintGradient("#00FFFF","#FF69B4",NAME)
                     
-                    ctypes.windll.kernel32.SetConsoleTitleW("|GOAT-EDITOR|   |MODULE|:(Combo-Edits)")
+                    ctypes.windll.kernel32.SetConsoleTitleW("|GOAT-ALLL IN ONE|   |MODULE|:(Combo-Edits)")
                     print("[1] Combo cleaner")
                     print("[2] reverser")
                     print("[3] combo sorter")
                     print("[4] shuffle")
                     print("[5] redupe")
                     print("[6] LQ TO HQ")
-                    print("[7] Join Multiple Combos Together")
+                    #print("[7] Join Multiple Combos Together")
                     print("[99] Main Menu")
                     choice = input("Choice: ")
                     if choice == "1":
@@ -1141,15 +1194,15 @@ def auth():
                         remove_dupes()
                     elif choice == "6":
                         LQTOHQ()
-                    elif choice == "7":
-                        Join_multiple_combos()
+                   # elif choice == "7":
+                     #   Join_multiple_combos()
                     elif choice == "99":
                         pass  
                     
                 elif Choicee == "4":
                     os.system("cls")
                     PrintGradient("#00FFFF","#FF69B4",NAME)
-                    ctypes.windll.kernel32.SetConsoleTitleW("|GOAT-EDITOR|   |MODULE|:(Dorking)")
+                    ctypes.windll.kernel32.SetConsoleTitleW("|GOAT-ALLL IN ONE|   |MODULE|:(Dorking)")
                     print("[1] scrape Pagetypes")
                     print("[2] scrape Pageformats")
                     print("[3] filter URls")
@@ -1168,17 +1221,16 @@ def auth():
                     elif Choice == "5":
                         get_pagetypes_from_urls()
                     elif Choice == "99":
-                        pass 
-                elif Choicee == "6":
+                        pass
+                elif Choicee == "5":
                     os.system("cls")
-                    print(f"""
-                                    +-----------------------------------------------------------------------------------------------------------------------------------+
-                                {ma} IQTHEGOAT#0310: the main devoloper of the tool worked on [pass edits , mail edits , combo edits, dork skidder, sql scanner]\n      
-                                {ree}  KillinMachine#2570: used some of his code on the parsers [BIG THANKS TO HIM FOR LETTING ME TO USE HIS PARSERS CODE IN MY PROJECT]\n
-                                {gr}  @! Y1ZOX7#9758: worked on the design and fixed the parsers                                                                       \n
-                    """)  
-
-                input("\n\n:")
+                    PrintGradient("#00FFFF","#FF69B4",NAME)
+                    print("\n\n\n{ISNT FINISHED YET WAIT TILL NEXT UPDATE}")
+                    time.sleep(5)
+                    os.system("cls")
+                elif Choicee == "6":
+                    print("IQTHEGOAT#0310\n! Y1ZOX7#9758\nKillinMachine#2570")
+                    time.sleep(5)
         else:
             print("[!] Invalid Choice")
             print("[!] Please try again")
