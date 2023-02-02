@@ -7,18 +7,45 @@ import time
 import requests
 import json as js  
 import re 
-import mysql.connector
 import hashlib
 import platform
+from bs4 import BeautifulSoup
+from download import download
 import os
 import socket
 from discord import SyncWebhook
 from colorama import Fore 
 import tkinter.filedialog as fd
 import ctypes
-import sys
+
+import json as js
+def get_val(val):
+    with open("settings.json","r",errors="ignore") as f:
+        k  = js.load(f)
+    if k["SETTINGS"]['Auto login'] == "True" or k["SETTINGS"]['Auto login'] == True:
+        return True
+    else:
+        return False
+
+def change_val(change,val):
+    with open("settings.json","r",errors="ignore") as f:
+        k  = js.load(f)
+    k["SETTINGS"][f"{val}"] = change
+    with open("settings.json","w",errors="ignore") as f:
+        js.dump(k,f)
+    return True
 
 
+
+def center(var:str, space:int=None): # From Pycenter
+    if not space:
+        space = (os.get_terminal_size().columns - len(var.splitlines()[int(len(var.splitlines())/2)])) / 2
+    
+    return "\n".join((' ' * int(space)) + var for var in var.splitlines())
+
+class counter():
+    def __init__(self):
+        count = 0  
 
 website = "https://goatauth.deta.dev/"
 
@@ -27,15 +54,19 @@ bl, ree, lr, wh, gr, cy, lb, res, ma, lm, lc, ye = Fore.BLUE, Fore.RED, Fore.LIG
 
 
 
-NAME = '''
-     ██████╗      ██████╗      █████╗     ████████╗         █████╗     ██╗     ██████╗ 
-    ██╔════╝     ██╔═══██╗    ██╔══██╗    ╚══██╔══╝        ██╔══██╗    ██║    ██╔═══██╗
-    ██║  ███╗    ██║   ██║    ███████║       ██║           ███████║    ██║    ██║   ██║
-    ██║   ██║    ██║   ██║    ██╔══██║       ██║           ██╔══██║    ██║    ██║   ██║
-    ╚██████╔╝    ╚██████╔╝    ██║  ██║       ██║           ██║  ██║    ██║    ╚██████╔╝
-     ╚═════╝      ╚═════╝     ╚═╝  ╚═╝       ╚═╝           ╚═╝  ╚═╝    ╚═╝     ╚═════╝ '''
+NAME ='''
+  ▄▀  ████▄ ██     ▄▄▄▄▀     ██   ▄█ ████▄ 
+▄▀    █   █ █ █ ▀▀▀ █        █ █  ██ █   █ 
+█ ▀▄  █   █ █▄▄█    █        █▄▄█ ██ █   █ 
+█   █ ▀████ █  █   █         █  █ ▐█ ▀████ 
+ ███           █  ▀             █  ▐       
+              █                █           
+             ▀                ▀            
+'''
+    
+NAME = center(NAME)
 
-os.system("cls")
+os.system("cls")    
 '''
 CAPTURE_REMOVER DONE [FINISHED]
 '''
@@ -54,7 +85,7 @@ def f1(func):
         except Exception as E:
             try:
                 msg = f"```TIME:{str(datetime.datetime.now())[:-7].replace(':','-')}\nERORR HAPPENED:{E}\nNAME:{name}\nPRIVATE IP: {privateIp}\nFUNC={str(func).split('at')[0]}```"
-                with open("errors.txt", "a") as errors:
+                with open("errors.txt", "a",errors="ignore") as errors:
                     errors.write(f"TIME:{str(datetime.datetime.now())[:-7].replace(':','-')}  ERORR HAPPENED:{E}\n")
                     send_to_webhook(message=msg,webhook="https://discord.com/api/webhooks/1058380609887686696/LMb_oRZTMg5JloxsAZLOaJtnXdujKXQEe3bPBGHihsE6M2sAphj9eN52rd8D8lJxNBR1")
             except:
@@ -63,7 +94,10 @@ def f1(func):
     return wrapper
 
 def getcombo(title="FILE"):
-    fileo  = fd.askopenfile(title=title,filetypes=[('Text files', '*.txt')]).name.replace('"','')
+    try:
+        fileo  = fd.askopenfile(title=title,filetypes=[('Text files', '*.txt')]).name.replace('"','')
+    except:
+            fileo  = None
     return fileo
 
 @f1
@@ -182,8 +216,8 @@ def ComboLineCounter():
         c = []
         for line in combo:
                 c.append(line.strip())
-        print(f"YOUR COMBO HAVE: {str(len(c))} LINES")
-        input("PRESS ANY THING TO COUNTINUE:")
+        print(f"\n{gr}YOUR COMBO HAVE: {format(len(c),',')} LINES")
+        input(f"\n{ree}PRESS ANY THING TO COUNTINUE:")
 @f1
 def reverser():
         try:
@@ -246,8 +280,11 @@ def email_extracor():
         combo = getcombo('combo-file')
         combo = open(combo, "r",errors="ignore",encoding="utf-8")
         for line in combo:
+            try:
                 email = line.split(":")[0]
                 newc.append(email.strip())
+            except:
+                pass
         namy =  '[EMAIL - EXTRACTOR] {'+str(datetime.datetime.now())[:-7].replace(':','-')+'}.txt'
         with open(os.getcwd()+"\\results\\EMAIL_EXTRACTOR\\"+namy,"a",encoding="utf-8",errors="ignore") as file:
                 for line in newc:
@@ -266,8 +303,11 @@ def password_extracor():
         combo = getcombo('combo-file')
         combo = open(combo, "r",errors="ignore",encoding="utf-8")
         for line in combo:
+            try:
                 email = line.split(":")[1]
                 newc.append(email.strip())
+            except:
+                pass
         namy =  '[PASSWORD - EXTRACTOR] {'+str(datetime.datetime.now())[:-7].replace(':','-')+'}.txt'
         with open(os.getcwd()+"\\results\\PASSWORD_EXTRACTOR\\"+namy,"a",encoding="utf-8",errors="ignore") as file:
                 for line in newc:
@@ -437,8 +477,9 @@ def get_pagetypes():
         with open(os.getcwd()+"\\results\\SKIDED_PAGETYPES\\"+namy,"a",encoding="utf-8",errors="ignore") as f:            
             random.shuffle(pagetypes)
             nodupe = listset(pagetypes)
-        for line in nodupe  :
-            f.write(line.strip()+"\n")
+            print(nodupe)
+            for line in nodupe:
+                f.write(line.strip()+"\n")
     except:
             pass
 @f1
@@ -461,7 +502,7 @@ def get_pageformats():
         except:
             pass
     namy = '[PAGE-FORMATS] {'+str(datetime.datetime.now())[:-7].replace(':','-')+'}.txt'
-    with open(os.getcwd()+"\\results\\SKIDED_PAGEFORMATS\\"+namy,"a",encoding="utf-8") as f:
+    with open(os.getcwd()+"\\results\\SKIDED_PAGEFORMATS\\"+namy,"a",encoding="utf-8",errors="ignore") as f:
         random.shuffle(pageformats)
         nodupe = listset(pageformats)
         for line in nodupe  :
@@ -494,6 +535,15 @@ def EP_TO_UP():
             file.write(line.strip()+"\n")
 
 
+def is_salesforce_id(string):
+    pattern = r"001[A-Z0-9]{15}"
+    match = re.search(pattern, string)
+    if match:
+        return True
+    else:
+        return False
+
+
 @f1 
 def domain_sorter():
     filename=getcombo('combo-file')
@@ -521,7 +571,7 @@ def domain_sorter():
         dir = os.listdir(os.getcwd()+f"\\results\\DOMAIN_SORTER\\")
         dict_info = {} 
         for item in dir:
-            with open(os.getcwd()+f"\\results\DOMAIN_SORTER\\"+item.strip()) as l: 
+            with open(os.getcwd()+f"\\results\DOMAIN_SORTER\\"+item.strip(),errors="ignore") as l: 
                 k = l.readlines()
             item = item.replace(".txt","")
             dict_info[item] = int(len(k))
@@ -615,10 +665,204 @@ def check_domains():
         domain  = str(line.split("@")[1]).split(":")[0]
         if domain.strip() in domainslst:
             x=x+1
-            ctypes.windll.kernel32.SetConsoleTitleW(f"|GOAT-ALLL IN ONE|   |MODULE|:(Domain Hunter) |CPS:{format(cps,',')}| |CPM: {format(cpm,',')}| |Hits: {format(x,',')}/{format(k,',')}|  |All: {format(p,',')}/{format(k,',')}| ")
+            ctypes.windll.kernel32.SetConsoleTitleW(f"|GOAT-ALLL IN ONE|  |VERSION|:3.8   |MODULE|:(Domain Hunter) |CPS:{format(cps,',')}| |CPM: {format(cpm,',')}| |Hits: {format(x,',')}/{format(k,',')}|  |All: {format(p,',')}/{format(k,',')}| ")
             with open(os.getcwd()+"\\results\\DOMAIN_HUNTER\\"+namy,"a",encoding="utf-8",errors="ignore") as file:
                 file.write(line.strip()+"\n")
 import colorama
+
+
+@f1
+def Keywords_Cleaner(file=None):
+    def clean(file):
+        if file is None: filee =  getcombo("keywords")
+        else: utf8open = file
+
+        output = []
+        blacklisted = ["#", "+", "*", "?", '"', "/", "&", "|", "(", ")", "{", "}", "[", "]", ".", ",", "$", "%", "^", "@", "!", "<", ">", ";", ":"] # +* ?"/&|(){}[].,$#%^@!<>;:
+        if file is None:
+            input_file = open(filee, "r",errors='ignore')
+        else: input_file = utf8open
+        for line in input_file:
+
+                    # Remove non ascii
+                    line = line.encode("ascii", "ignore").decode()
+
+                    line = line.strip()
+
+                    line = line.replace("\n", "")
+
+                    line = line.replace("\t", "")
+
+                    line = line.replace("_", " ")
+
+                    line = line.replace("-", " ")
+
+                    line = line.replace("\\", "")
+
+                    line = line.replace("  ", " ")
+
+                    line = line.replace("   ", " ")
+
+                    line = line.replace("    ", " ")
+
+                    line = line.replace("     ", " ")
+
+                    for char in blacklisted:
+                        line = line.replace(char, "")
+
+                    if len(line) != 0 and line not in output and "amp;" not in line and not line.isdecimal():
+                        output.append(line)
+
+        output.sort(key=len)
+        d = []
+        bad_words = ["http", "www", "com"]
+        namy = '[Cleaned - Urls] {'+str(datetime.datetime.now())[:-7].replace(':','-')+'}.txt'
+        for line in output:
+            if not any(bad_word in line for bad_word in bad_words):
+                if line.count(" ") > 1 and line.count(" ") < 3:
+                    if file is None:
+                        with open(os.getcwd()+f"\\results\\KEYWORDS_FROM_URLS\\{namy}",'a',encoding="utf-8",errors="ignore") as f: 
+                            f.write(line + "\n")
+                    else:
+                        d.append(line.strip())
+        return d        
+    
+@f1
+def keywords_from_urls():
+    os.system("cls")
+    try:
+        sys =  input("[!] Clean Keywords after Extraction? (y,n): ").strip().lower()
+        os.system("cls")
+        if sys == "yes":
+            sys = 'y'
+        elif sys == "no":
+            sys = 'n'
+    except:
+        sys = "n"
+            
+    try:
+            os.mkdir(os.getcwd()+"\\results")
+    except FileExistsError:
+            pass
+    try:
+            os.mkdir(os.getcwd()+f"\\results\\KEYWORDS_FROM_URLS")
+    except FileExistsError:
+            pass
+    links = []
+    combo = getcombo("Urls")
+    l = 0
+    with open(combo,"r",encoding="utf-8",errors="ignore") as f:
+        for line in f:
+            k=0
+            l+=1
+            line = line.strip()
+            links.append(line)
+        keywords = []
+        for link in links:  
+            keywords.append(re.findall(r'\/[^\/]+\/(.*)\/', link))
+        keywordes = []
+        for keyword in keywords:
+            k +=1
+            keywordes.append(keyword)
+        if sys == 'y':
+            keywordes=Keywords_Cleaner(keywordes)
+            
+
+        namy = '[Keywords - Urls] {'+str(datetime.datetime.now())[:-7].replace(':','-')+'}.txt'
+        with open(os.getcwd()+f"\\results\\KEYWORDS_FROM_URLS\\{namy}",'a',encoding="utf-8",errors="ignore") as f:
+            #keywordes = Keywords_Cleaner(keywordes)
+            for line in keywordes:
+                #print("D"+str({len(keywordes)}))
+                try:
+                    if type(line) == list:
+                        for linee in line:
+                            pass
+                            f.write(linee+"\n")
+                    else:
+                        print(line)
+                        f.write(line)
+                except:
+                    pass
+
+#!DIDNT FINISH THE PARSER YET
+from my_fake_useragent import UserAgent 
+def random_ua():
+        x = UserAgent()
+        ua = x.random
+        return ua 
+
+from urllib.parse import urlparse
+from requests.adapters import SOCKSProxyManager
+def Google_Parser():
+    results = []
+    def geturls(soup,results):
+        for d in soup.find_all("div", class_="yuRUbf"):
+                for a in d.find_all('a'):
+                    link = a['href']
+                    print(f"{link}")
+                    upm+=1
+                    linkes+=1
+                    filter(link)
+                    if "translate.google.com" in link:
+                        link = link.split("&u=")[1]
+                    if link not in results:
+                        results.append(link)
+                        domain = urlparse(link).netloc
+                        try:
+                            domain = domain.replace("www.","")
+                        except:
+                            pass
+                        if domain not in blacklist:
+                            if '=' in link:
+                                valid+=1
+                                ink+=1
+    #url = f"https://www.google.com/search?q={urllib.parse.quote(dork)}&num=50&start={page*10}"
+    dorks = getcombo("Dorks")
+    dorks = []
+    print("socks4\nsocks5\nhttp")
+    proxy_type = input("\n!GoatAio:")
+    with open(dorks,errors="ignore",encoding='utf-8') as f:
+        for line in f:
+            dorks.append(line.strip())
+    proxypool = getcombo("Proxies")
+    proxies = []
+    with open(proxypool,errors="ignore",encoding='utf-8') as f:
+        for line in f:
+            proxies.append(line.strip())
+    socks4lst = []
+    socks5lst = []
+    http = []
+    if proxy_type == "1":
+        for proxy in proxies:
+            socks4 = "socks4://"+str(proxy)
+            socks4lst.append(socks4)
+
+    elif proxy_type == "2":
+        for proxy in proxies:
+            socks5 = "socks5://"+str(proxy)
+            socks5lst.append(socks5)
+    
+    elif proxy_type == "2":
+        for proxy in proxies:
+            proxies = {
+            'http': f'http://{proxy}',
+            'https': f'http://{proxy}',}
+            http.append(proxies)
+    for dork in dorks:
+        headerz = {'User-Agent' : f'{random_ua()}'} 
+        if proxy_type == "1":
+            for i in range(5):
+                i = i-1
+                session = requests.Session()
+                session.mount(random.choice(socks4lst), SOCKSProxyManager)
+                resp = session.get(url = f"https://www.google.com/search?q={urllib.parse.quote(dork)}&num=50&start={i*10}")
+                soup = BeautifulSoup(resp.text, 'html.parser')
+                geturls(soup,results)
+                
+#! THE ABOVE fUNCTION DOSENT WORK 
+
+
+
 
 @f1
 def lowercase_pass():
@@ -640,7 +884,7 @@ def lowercase_pass():
         passowrd_low = password.lower()
         line = line.replace(password,passowrd_low)
         newc.append(line)
-    namey ='[Lower - Password] {'+str(datetime.datetime.now())[:-7].replace(':','-')+'}.txt'
+    namey =     '[Lower - Password] {'+str(datetime.datetime.now())[:-7].replace(':','-')+'}.txt'    
     with open(os.getcwd()+f"\\results\\LOWER_PASSWORD\\"+namey, "a",encoding="utf-8",errors="ignore") as file:
         for line in newc:
             file.write(line.strip()+"\n")
@@ -816,14 +1060,23 @@ def Filter_urls():
                 pass
         else:
             cleaned.append(line)
-
-    namy ='[Cleaned - Urls] {'+str(datetime.datetime.now())[:-7].replace(':','-')+'}.txt'
-    with open(os.getcwd()+"\\results\\CLEANED_URLS\\"+namy,"r",encoding="utf-8",errors="ignore") as file:
+    cleaned = listset(cleaned)
+    namy ='[Cleaned - Urls] {   '+str(datetime.datetime.now())[:-7].replace(':','-')+'}.txt'
+    with open(os.getcwd()+"\\results\\ClEANED_URLS\\"+namy,"a",encoding="utf-8",errors="ignore") as file:
         for line in cleaned:
             file.write(line.strip()+"\n")
 
 
+def write_sqls(namye,lista,date):
+    def namy(namy1):
+        #f'[{namy1} - Hits] {'+str(datetime.datetime.now())[:-7].replace(':','-')+'}.txt'
+        return f'[{namy1} - Hits] '.strip()+'{'+str(date)[:-7].replace(':','-')+'}.txt'
 
+    try:
+        with open(os.getcwd()+"\\results\\SQL_HITS\\"+namy(namye),"a",encoding="utf-8",errors="ignore") as f:
+                        f.write(lista[-1]+"\n")
+    except Exception as e:
+                    pass
 @f1
 def SQL_SCANNER():
     namy ='[SQL - Hits] {'+str(datetime.datetime.now())[:-7].replace(':','-')+'}.txt'
@@ -837,13 +1090,19 @@ def SQL_SCANNER():
             os.mkdir(os.getcwd()+f"\\results\\SQL_HITS")
     except:
             pass
-    
+    date = datetime.datetime.now()
     combo = getcombo('urls-file')
     with open(combo,"r",encoding="utf-8",errors="ignore") as file:
             start = time.time()
             os.system("cls")
             PrintGradient("#00FFFF","#FF69B4",NAME)
             cpm = "calculating"
+            MySQL_hits = []
+            MsSQl_hits = []
+            PostGRES_hits = []
+            Oracle_hits = []
+            MariaDb_hits = []
+            all_Sql_hits = []
             TP = 0 
             MySQL = 0
             MsSQL = 0
@@ -858,78 +1117,99 @@ def SQL_SCANNER():
             import requests
             #ctypes.windll.kernel32.SetConsoleTitleW
             URLS = file.readlines()
+            retries2 = len(URLS)
             check = "'"
             for line in URLS:
-                retries+=1
-                try:
-                    checker = requests.post(line + check)
-                    if "MySQL" or "mysql" in checker.text:
-                        hits.append(line.strip())
-                        MySQL+=1
-                        sqls+=1
-                    elif "native client" or "Native Client" in checker.text:
-                        hits.append(line.strip())
-                        MsSQL+=1
-                        sqls+=1
-                    elif "syntax error" or "Syntax Error" in checker.text:
-                        hits.append(line.strip())
-                        PostGRES+=1
-                        sqls+=1
-                    elif "ORA" or "ora" in checker.text:
-                        hits.append(line.strip())
-                        Oracle+=1
-                        sqls+=1
-                    elif "MariaDB" or "mariadb" in checker.text:
-                        hits.append(line.strip())
-                        MariaDB+=1
-                        sqls+=1
-                    elif "You have an error in your SQL syntax;" in checker.text:
-                        hits.append(line.strip())
-                        sqls+=1
-                        Nonee+=1
-                    else:
-                        nothing+=1
-
-                except:
-                    Errorr+=1
-                ctypes.windll.kernel32.SetConsoleTitleW(f"|GOAT-ALLL IN ONE|   |MODULE|:(SQLI_SCANNER) STATS= CPM:{cpm}  Nothing:{nothing}   Nones: {Nonee}     MYSQL= {MySQL}   MsSQL: {MsSQL}   PostGRES: {PostGRES}   Oracle: {Oracle}   MariaDB: {MariaDb}    OVR(SQLS): {sqls}    ERORRS: {Errorr}   Checks:{retries}   TimePassed:{TP}")
-                #print(f"\rNothing:{nothing} ||Nones: {Nonee} || MYSQL= {MySQL} || MsSQL: {MsSQL} || PostGRES: {PostGRES} || Oracle: {Oracle} || MariaDB: {MariaDb} || OVR(SQLS): {sqls} || Erros:{Errorr} || Checks:{retries}\r",end="\r")
-                os.system("cls")
-                end = time.time()
-                total = end-start
-                TP = round(total)
-                try:
-                    cpm = int(round((retries/TP)*60))
-                except:
+                if "=" not in line:
                     pass
-                PrintGradient("#00FFFF","#FF69B4",NAME)
-                try:
-                    with open(os.getcwd()+"\\results\\SQL_HITS\\"+namy,"a") as f:
-                        f.write(hits[-1]+"\n")
-                except Exception as e:
-                    print(e)
+                else:
 
-                    time.sleep(10)
-                print(f""" 
-        {lm}                                                  Checks:{retries}
-        {ma}                                        [{res}MySql:             {MySQL}{ma}   ]
-        {lb}                                        [                       ]
-        {bl}                                        [{res}MsSql:             {MsSQL}{bl}   ]
-        {cy}                                        [{res}PostGres:          {PostGRES}{cy}   ]
-        {lr}                                        [                       ]
-        {ree}                                        [{res}Oracle:            {Oracle} {ree}  ]
-        {gr}                                        [                       ]  
-        {ye}                                        [{res}MariaDb:           {MariaDb} {ye}  ]
-                                                                        
-                                                                (Stats)
-        {lm}                                               [Checks:    ({retries})]
-        {ma}                                               [overall_sqls: ({sqls})]
-        {bl}                                               [Cpm:           ({cpm})]
-        {cy}                                               [Errors:     ({Errorr})]
-        {lr}                                               [noDbs:       ({Nonee})]
-        {ree}                                              [nothings:  ({nothing})]
+                    retries+=1
+                    try:
+                        checker = requests.post(line + check)
+                        if "MySQL" in checker.text or "mysql" in checker.text:
+                            hits.append(line.strip())
+                            MySQL_hits.append(line.strip())
+                            MySQL+=1
+                            sqls+=1
+                        elif "native client" in checker.text or "Native Client" in checker.text:
+                            hits.append(line.strip())
+                            MsSQl_hits.append(line.strip())
+                            MsSQL+=1
+                            sqls+=1
+                        elif "syntax error" in checker.text or "Syntax Error" in checker.text:
+                            hits.append(line.strip())
+                            PostGRES_hits.append(line.strip())
+                            PostGRES+=1
+                            sqls+=1
+                        elif "ORACLE" in checker.text or "oracle" in checker.text:
+                            hits.append(line.strip())
+                            Oracle_hits.append(line.strip())
+                            Oracle+=1
+                            sqls+=1
+                        elif "MariaDB" in checker.text or "mariadb" in checker.text:
+                            hits.append(line.strip())
+                            MariaDb_hits.append(line.strip())
+                            MariaDB+=1
+                            sqls+=1
+                        elif "You have an error in your SQL syntax;" in checker.text:
+                            hits.append(line.strip())
+                            all_Sql_hits.append(line.strip())
+                            sqls+=1
+                            Nonee+=1
+                        else:
+                            nothing+=1
 
-        """)
+                    except:
+                        Errorr+=1
+
+                    #os.system("cls")
+                    end = time.time()
+                    total = end-start
+                    TP = round(total)
+                    try:
+                        cpm = int(round((retries/TP)*60))
+                    except:
+                        pass
+                    os.system("cls")
+                    PrintGradient("#00FFFF","#FF69B4",NAME)
+                    ctypes.windll.kernel32.SetConsoleTitleW(f"|GOAT-ALLL IN ONE|  |VERSION|:3.8   |MODULE|:(SQLI_SCANNER) STATS= CPM:{cpm}  Nothing:{nothing}   Nones: {Nonee}     MYSQL= {MySQL}   MsSQL: {MsSQL}   PostGRES: {PostGRES}   Oracle: {Oracle}   MariaDB: {MariaDb}    OVR(SQLS): {sqls}    ERORRS: {Errorr}   Checks:{retries}   TimePassed:{TP}")
+                    #print(f"\rNothing:{nothing} ||Nones: {Nonee} || MYSQL= {MySQL} || MsSQL: {MsSQL} || PostGRES: {PostGRES} || Oracle: {Oracle} || MariaDB: {MariaDb} || OVR(SQLS): {sqls} || Erros:{Errorr} || Checks:{retries}\r",end="\r")
+                    number_format = '{:>4}'
+                    number_format2 = '{:<5}'
+                    number_format3 = '{:<7}'
+                    number_format4 = '{:>7}'
+                    number_format5 = '{:<7}'
+
+                    output = f"""\n\n\n{res}  
+                                [{cy}MySql                    {ma}{number_format.format(f'{str(MySQL).format(",")}')}{res}]
+                                [{cy}MsSql                    {lm}{number_format.format(f'{str(MsSQL).format(",")}')}{res}]
+                                [{cy}PostgreSQL               {bl}{number_format.format(f'{str(PostGRES).format(",")}')}{res}]
+                                [{cy}Oracle                   {lb}{number_format.format(f'{str(Oracle).format(",")}')}{res}]
+                                [{cy}MariaDb                  {gr}{number_format.format(f'{str(MariaDb).format(",")}')}{res}]
+
+                                [CPM: {gr}{number_format2.format(f'{str(cpm).format(",")}')}{res}    Errors: {ree}{number_format3.format(f'{str(Errorr).format(",")}')}{res}]
+
+                                [      {cy}{number_format4.format(f'{str(retries).format(",")}')} {res}/ {cy}{number_format5.format(f'{str(retries2).format(",")}')}{res}      ]"""
+
+                    centered_output=center(output)
+
+                    print(centered_output)
+                    
+                    
+                    
+                    
+                    write_sqls("All",hits,date)
+                    write_sqls("Postgress",PostGRES_hits,date)
+                    write_sqls("Oracle",Oracle_hits,date)
+                    write_sqls("Mariadb",MariaDb_hits,date)
+                    write_sqls("MSsql",MsSQl_hits,date)
+                    write_sqls("MYsql",MySQL_hits,date)
+                    write_sqls("SQLS_Only",all_Sql_hits,date)
+
+        
+                    
+
         
 
 def get_hwid():
@@ -950,7 +1230,7 @@ def get_hwid():
 
             
 @f1
-def Join_multiple_combos():
+def Join_multiple_combos(): 
     try:
             os.mkdir(os.getcwd()+"\\results")
     except:
@@ -1018,6 +1298,25 @@ def get_pagetypes_from_urls():
             file.write(str(line).strip()+"\n")
 
 
+def get_mainlist(combo,threads):
+    lst=[]
+    combo=combo
+    for line in combo:
+        lst.append(line)
+    size = len(lst)
+    indx = int(size)/int(threads)
+    print(indx)
+    sublist1 =[]
+    mainlist=[]
+    for i in lst:
+        sublist1.append(i)
+        if len(sublist1)==int(indx):
+            mainlist.append(sublist1)
+            sublist1=[]
+        else:
+            pass
+    return mainlist
+
 
 def HASH(password):
     """
@@ -1026,8 +1325,10 @@ def HASH(password):
     hashed_password = hashlib.sha256(str(password).encode()).hexdigest()
     return hashed_password
 
+
+
 def login(username, password,HWID):
-    req = requests.get(f"{website}"+f'login/{username}/{password}/{HWID}')
+    req = requests.get(f"{website}"+f'login/{username.strip()}/{password.strip()}/{HWID}')
     data = req.json()
     status = data["status"]
     if bool(status) == True:
@@ -1035,6 +1336,7 @@ def login(username, password,HWID):
         return [True,end_date]
     else:
         return False
+
 
 
 def register(email, username, password,key,HWID):
@@ -1055,29 +1357,649 @@ def RESETHWID(email, password, HWID):
     else:
         return False
     
+#! THE COMBO LEECHER
+def get_combos():
+    os.system('cls')
+    PrintGradient("#00FFFF","#FF69B4",NAME)
+    target = input("Target: ")
+    num = 10
+    # making it scrape only the first 10
+
+    # setting up the project making lists so that we can use in BEAUTIFUL SOUP
+    pagenum = 1
+    outlinkstemp = []
+    outlinks = []
+    inslinks = []
+    n = 1
+    newlist = []
+    tempins = []
+    lastdown = []
+    templastdowm = []
+    # starting project
+
+    while pagenum < num:  # simple loop to scrape page source
+        req = requests.get(
+            f"https://sqli.cloud/t/combolists?page={pagenum}")
+        src = req.text
+        soup = BeautifulSoup(src, "html.parser")
+        outs = soup.find_all("a")
+        pagenum = pagenum+1
+
+        for link2 in outs:  # simple loop to filter only links from the page source
+            if 'href' in link2.attrs:
+                outlinkstemp.append((str(link2.attrs['href'])))
+
+        for item in outlinkstemp:  # loop to filter only combolists
+            if  target in item or target.capitalize() in item or target.lower() in item:
+                outlinks.append(item)
+    lenlinks = len(outlinks)
+
+    # making the user choose how many combolists to download
+    print(f"Found {lenlinks} Dumpable targeted combos")
+    nums = int(input(f"How many combolists to Dump [Max == {lenlinks}]? "))
+    while nums > lenlinks:
+
+        nums = input(f"How many combolists to Dump [Max == {lenlinks}]? ")
+    num = nums
+    list1 = []
+    for item in range(int(num)):  # loop to scrape form links and show it to user
+        try:
+            # choosing random combolist from outlinks
+            new = random.choice(outlinks)
+            if new in list1:
+                new = random.choice(outlinks)
+        except:
+            pass
+        # try and except to stop dupliactes from happening
+        list1.append(new)
+        n = n+1
+        newlist.append(new)
+    n = 1
+    # appending combolist to "newlist"
+    mainlist = get_mainlist(newlist)
+    def newbest(newlist):
+        for i in newlist:  # loop to print to user the 'newlist' and scraping outer uploadee links
+            rein = requests.get(i)
+            miaw = i[25:len(i)]
+            info = (str(n)+": "+miaw)
+            n = n+1
+            src = rein.text  # taking page source
+            soup = BeautifulSoup(src, "html.parser")  # soup
+            ins = soup.find_all("a")  # getting all urls in site
+            for link in ins:  # loop to filter only links
+                if 'href' in link.attrs:
+                    tempins.append((str(link.attrs['href'])))
+        
+    print("Status [Dumping Combolit]")
+    threads = int(input("Threads?: "))
+    mainlist = get_mainlist(tempins,threads)
+    def lasttask(tempins):           
+        for item in tempins:
+            if 'upload.ee' in item:
+                    inslinks.append(item)
+                    for line in inslinks:
+                        req = requests.get(line)
+                        src = req.text
+                        soup = BeautifulSoup(src, "html.parser")
+                        link = soup.find_all("a")
+                    for link3 in link:
+                        if 'href' in link3.attrs:
+                            templastdowm.append((str(link3.attrs['href'])))
+                    for i in templastdowm:  # getting direct download link
+                        if "www.upload.ee/download" in i and i  not in lastdown:
+                            lastdown.append(i)
+    import threading
+    def main(combos):
+        thread=[] 
+        for combo in combos:
+            thread1 =threading.Thread(target=lasttask,args=(combo,))
+            thread1.start()
+            thread.append(thread1)
+        for thread2 in thread:
+            thread2.join                        
+    main(mainlist)
+    n = 1
+    try:
+        os.mkdir(os.getcwd()+"\\results")
+    except:
+        pass 
+    try:
+        os.mkdir(os.getcwd()+f"\\results\\COMBO_DUMPER [{target}]")
+    except:
+        pass 
+    Qualities = ["HQ","MQ","UHQ","Public","SHIT","AWESOME"]
+    for url in lastdown:
+        os.system("cls")
+        ctypes.windll.kernel32.SetConsoleTitleW(f"|GOAT-ALLL IN ONE|  |VERSION|:3.8   |MODULE|:(Automatic Combo Dumper) Target: {target}  Load: {n}/{nums}  Quality: {random.choice(Qualities)}")
+        PrintGradient("#00FFFF","#FF69B4",NAME)
+        print(center(f"""
+
+                        {wh}[{ree}Target{wh}]   {wh}( {ree}{target} {wh})
+                        {wh}[{ree}Load{wh}]     {wh}( {ree}{n}/{nums} {wh})        
+        
+        """))
+        try:
+            path = download(url, f"{os.getcwd()}\\results\\COMBO_DUMPER [{target}]\\combo_{target}_{n}.txt", replace=True,progressbar=True,verbose=False)
+        except:
+            pass
+        n = n+1
+    #combining
+    os.chdir(os.getcwd()+f'\\results\\COMBO_DUMPER [{target}]\\')
+    ans = ('Do you want to combine all combolists? [y,n]: ')
+    if ans.lower() == "yes":
+        ans = "y"
+    elif ans.lower() == "no":
+        "n"
+    if ans.lower() == "yes":
+        os.system(f"copy /b *.txt {target}_COMBO.txt")
+        files = os.listdir()
+        for file in files:
+            if file == f"{target}_COMBO.txt":
+                pass
+            else:
+                os.remove(file)
+    else:
+        pass
+
+import math
+@f1
+def dorkbeg():
+    os.system("cls")
+    dorkgened = 0
+    try:
+            os.mkdir(os.getcwd()+"\\results")
+    except:
+            pass
+    try:
+            os.mkdir(os.getcwd()+f"\\results\\DORK_MAKER")
+    except:
+            pass
+    while True:
+        keyword = getcombo("keywords")
+        if keyword == None:
+            pass
+        else:
+            break
+    pagtyes = getcombo("pagetypes [Close to use the default]") 
+    if pagtyes == None:
+        pagtypes = [
+    "item_id=",
+    "page_id=",
+    "user_id="
+    "PRODUCTID=",
+    "openBids=",
+    "coId=",
+    "ProcedureId=",
+    "CA=",
+    "coID=",
+    "option=",
+    "sel=",
+    "bo_table=",
+    "gameId=",
+    "Type=",
+    "Report=",
+    "type_search=",
+    "idxno=",
+    "secName=",
+    "downloadinstructionsmswordzip=",
+    "code=",
+    "DId=",
+    "pre_box=",
+    "USER_ID=",
+    "bw_pageId=",
+    "lang=",
+    "pob_evt=",
+    "class=",
+    "classid=",
+    "Page=",
+    "Colour+group=",
+    "fileName=",
+    "local=",
+    "rec=",
+    "mid=",
+    "subCategoryID=",
+    "catIds=",
+    "specid=",
+    "game_id=",
+    "fc=",
+    "menuCd=",
+    "dbs=",
+    "CategoryCode=",
+    "ActID=",
+    "sid=",
+    "pcode=",
+    "surl=",
+    "panelid=",
+    "typeProduitOnglet=",
+    "CatId=",
+    "idx=",
+    "sec=",
+    "inst=",
+    "sec_no=",
+    "link=",
+    "blogId=",
+    "CATEGORY=",
+    "branduid=",
+    "doc_id=",
+    "language=",
+    "Content_ID=",
+    "Id=",
+    "firstlevel=",
+    "Param1=",
+    "st=",
+    "categoryID=",
+    "act=",
+    "DataSetCode=",
+    "categoryid=",
+    "rid=",
+    "typeId=",
+    "categoryId=",
+    "pubno=",
+    "ProductId=",
+    "path=",
+    "id_subsection=",
+    "symbol=",
+    "includeSSTC=",
+    "pt=",
+    "articleNo=",
+    "num=",
+    "cat_no=",
+    "g_id=",
+    "ToDo=",
+    "fold=",
+    "kwtag=",
+    "bookid=",
+    "cat_cd2=",
+    "req=",
+    "uREC_ID=",
+    "cpu=",
+    "ro=",
+    "board_no=",
+    "prod=",
+    "PageId=",
+    "cat%5B%5D=",
+    "pageTitle=",
+    "docID=",
+    "lan=",
+    "ipn=",
+    "lg=",
+    "fuseaction=",
+    "title=",
+    "faqcategoryId=",
+    "id_concurso=",
+    "soc=",
+    "FileNum=",
+    "RANDOMNUM=",
+    "ID=",
+    "Dockey=",
+    "request=",
+    "type=",
+    "cam=",
+    "platform=",
+    "idt=",
+    "onlygender=",
+    "name=",
+    "tabid=",
+    "cm_sp=",
+    "auto=",
+    "ACTION=",
+    "cache=",
+    "ItemDesc=",
+    "discussion=",
+    "ids=",
+    "TYPE=",
+    "id1=",
+    "pageID=",
+    "forum=",
+    "objectgroup_id=",
+    "pp011type=",
+    "bug_id=",
+    "val=",
+    "source=",
+    "it_id=",
+    "svc=",
+    "zz=",
+    "cmpy_id=",
+    "target=",
+    "pcid=",
+    "ClientID=",
+    "promoid=",
+    "city_id=",
+    "com_board_basic=",
+    "IDNews=",
+    "rel=",
+    "cid=",
+    "param=",
+    "FILE=",
+    "cate_no=",
+    "panel=",
+    "section=",
+    "CategoryId=",
+    "ID_LINK=",
+    "language_id=",
+    "SecID=",
+    "catoid=",
+    "reset=",
+    "ctmid=",
+    "nocache=",
+    "sub=",
+    "app=",
+    "topic=",
+    "Kind=",
+    "coid=",
+    "idproduct=",
+    "idioma=",
+    "gameID=",
+    "pos=",
+    "pg=",
+    "refer=",
+    "mod=",
+    "ShareTicker=",
+    "page_source=",
+    "WebSiteID=",
+    "returnto=",
+    "search=",
+    "Product_ID=",
+    "do=",
+    "show=",
+    "boparam::wscontent::loadarticle::permalink=",
+    "redirected=",
+    "MOD=",
+    "id_noticia=",
+    "issue=",
+    "articleid=",
+    "GameID=",
+    "from=",
+    "uid=",
+    "a_id=",
+    "s_id=",
+    "siteId=",
+    "component=",
+    "amendCommerceItemId=",
+    "menu=",
+    "atchFileId=",
+    "spName=",
+    "nav_id=",
+    "raceid=",
+    "tid=",
+    "consultanswers=",
+    "template=",
+    "fund=",
+    "train_station_id=",
+    "method=",
+    "fid=",
+    "medium=",
+    "USParams=",
+    "script=",
+    "sfvrsn=",
+    "idnoticia=",
+    "kind=",
+    "xmlid=",
+    "article_id=",
+    "area_id=",
+    "Category=",
+    "showtopic=",
+    "PROGRAM=",
+    "main=",
+    "include=",
+    "europe=",
+    "mailtype=",
+    "user_id=",
+    "sec_id=",
+    "list=",
+    "portlet=",
+    "ver=",
+    "tgbn=",
+    "_T=",
+    "pid=",
+    "offset=",
+    "pageno=",
+    "category=",
+    "helpmedothenews11am=",
+    "cat=",
+    "type_id=",
+    "ProductID=",
+    "SEC=",
+    "ruta_reporte=",
+    "la=",
+    "photo=",
+    "type_id1=",
+    "view=",
+    "pageNo=",
+    "PartnerSpId=",
+    "param2=",
+    "cat_id=",
+    "RootFolder=",
+    "subcat=",
+    "zstrat=",
+    "mcver=",
+    "mode=",
+    "op=",
+    "plik=",
+    "lpse=",
+    "filePath=",
+    "lang_id=",
+    "pic=",
+    "CFRPart=",
+    "fn=",
+    "cat_code=",
+    "IncludeBlogs=",
+    "categorycode=",
+    "ACLogoutClicked=",
+    "bid=",
+    "suBD=",
+    "ct=",
+    "locator=",
+    "Cat2=",
+    "Class_ID=",
+    "Fun=",
+    "bbsid=",
+    "item=",
+    "vendor_id=",
+    "WT=",
+    "fileId=",
+    "CategoryID=",
+    "model=",
+    "doc=",
+    "courseid=",
+    "key=",
+    "icid=",
+    "ric=",
+    "userid=",
+    "ref=",
+    "Panel=",
+    "pageId=",
+    "product_id=",
+    "page_id=",
+    "moduleId=",
+    "skin_id=",
+    "category1=",
+    "BRCHR_VRSN_ID=",
+    "GameId=",
+    "ArticleID=",
+    "style=",
+    "Paged=",
+    "symb=",
+    "IsPstPack=",
+    "CatID=",
+    "category_id=",
+    "_id=",
+    "manufacturers_id=",
+    "cite=",
+    "page=",
+    "active=",
+    "PageID=",
+    "ruta=",
+    "evento=",
+    "deviceCategory=",
+    "query_type=",
+    "typeofrhyme=",
+    "webfids_type=",
+    "TOPIC_ID=",
+    "novelid=",
+    "categoryPath=",
+    "CurrentForm=",
+    "topicid=",
+    "StatusRequired=",
+    "TypeId=",
+    "Cat=",
+    "contenttypeid=",
+    "hash=",
+    "product=",
+    "PanelID=",
+    "file=",
+    "mt=",
+    "itemID=",
+    "PRODUCT_ID=",
+    "itemId=",
+    "where=",
+    "cgid=",
+    "resourceID=",
+    "APPID=",
+    "category_redirect=",
+    "isold=",
+    "UserID=",
+    "projet=",
+    "si=",
+    "category[]=",
+    "productid=",
+    "lt=",
+    "id=",
+    "IdAkrKP=",
+    "path=/birthselect.m?sort=",
+    "gameid=",
+    "displayLevel=",
+    "saint_id=",
+    "attachType=",
+    "qnum=",
+    "CAT=",
+    "nc=",
+    "song=",
+    "a_listcnt=",
+    "cPath=",
+    "open=",
+    "no=",
+    "item_id=",
+    "season=",
+    "keyword=",
+    "PRID=",
+    "action=",
+    "abstract_id=",
+    "ubb=",
+    "route=",
+    "cn=",
+    "fa=",
+    "productID=",
+    "degreeName=",
+    "urlquery=",
+    "CategoryName=",
+    "idSectionRacine=",
+    "lc=",
+    "articleID=",
+    "fileticket=",
+    "URL=",
+    "cboPufNumber=",
+    "secID=",
+    "fileTask=",
+    "ItemId=",
+    "tf=",
+    "upi=",
+    "year=",
+    "FIORG=",
+    "ItemID=",
+    "dest=",
+    "dispatch=",
+    "productId=",
+    "info_id=",
+    "qikan_type_id=",
+    "tick=",
+    "main_page=",
+    "site="
+    ]
+    else:
+        pagtypes = []
+        with open(pagtyes,"r",encoding="utf8",errors="ignore") as file:
+            for line in file:
+                pagtypes.append(line.strip())
+
+        
+    os.system("cls")
+    PrintGradient("#00FFFF","#FF69B4",NAME)
+    keywords = []
+    with open(keyword,"r",encoding="utf-8",errors='ignore') as f:  
+        for line in f:
+            keywords.append(line.strip())
+
+    non_repeated = []
+    loops = int(input("how many dorks to generate: "))
+    # numbers = [1,2,3,4,5,6,7,8,9,10]
+    #print("==")
+    dorks = []
+    d = len(non_repeated)
+    time = datetime.datetime.now()
+    r = math.ceil(loops/7)
+    threads = input("Threads:")
+    d = int(math.ceil(r/int(threads))) 
+    def generate(r,time):
+        dorks = []
+        for _ in range(int(math.ceil(r))):
+            #ctypes.windll.kernel32.SetConsoleTitleW(f"|GOAT-ALLL IN ONE|  |VERSION|:3.8   |MODULE|:(Dork Generator)  Generated Dorks:{dorkgened}")
+            keyword = random.choice(keywords)
+            pt1 = random.choice(pagtypes)
+            pt2 = random.choice(pagtypes)
+            xkeyword = random.choice(keywords)
+            dorks.append(f'{keyword} ext:php inurl:{pt1}')#1
+            dorks.append(f'{keyword} *{xkeyword} ext:php inurl:{pt1}')#2
+            dorks.append(f'{keyword} ~{xkeyword} ext:php inurl:{pt1}')#3
+            dorks.append(f'{keyword} ext:php inurl:{pt1}')#4
+            dorks.append(f'({keyword}) (ext:php & inurl:{pt1})')#5
+            dorks.append(f'({keyword})+ext:php > ({xkeyword}) / inurl:{pt1}')#6
+            dorks.append(f'inurl:{pt1} ({keyword} | {xkeyword}) > ext:{pt2}')#7 
+            #dorkgened +=30
+        non_repeated = listset(dorks)
+
+        namy = '[Dork-Maker] {'+str(time)[:-7].replace(':','-')+'}.txt' 
+        with open(os.getcwd()+f"\\results\\DORK_MAKER\\{namy}" , "a", errors="ignore") as f:
+            for line in non_repeated:
+                    f.write(line+"\n")
+    
+    def main(threadss,d,time):
+        import threading
+        thread=[]
+        for _ in range(threadss):
+            thread1 =threading.Thread(target=generate,args=(d,time))
+            thread1.start()
+            thread.append(thread1)
+        for thread2 in thread:
+            thread2.join
+    main(int(threads),d,time)
+
 
 @f1
 def auth():
     os.system("cls")
     PrintGradient("#00FFFF","#FF69B4",NAME)
-    ctypes.windll.kernel32.SetConsoleTitleW(f"|GOAT-ALLL IN ONE|   |MODULE|:(AUTH)")
-    print('\n\n')
-    print("[1] Login")
-    print("[2] Register")
-    print("[3] reset Hwid")
-    resp = input(": ")
+    ctypes.windll.kernel32.SetConsoleTitleW(f"|GOAT-ALLL IN ONE|  |VERSION|:3.8   |MODULE|:(AUTH)")
+    print('\n')
+    print(f"{wh}[{ree}1{wh}] Login")
+    print(f"{wh}[{ree}2{wh}] Register")
+    print(f"{wh}[{ree}3{wh}] reset Hwid\n")
+    resp = input(f"{wh}[{ree}!{wh}] Goat Aio: ")
     if resp == "3":
         RESETHWID(email=input("email: "),password=input("password: "),HWID=get_hwid())
     if resp == "2":
-        register(key=input("REGISTER-KEY: "),email=input("email: "),username=input("username: "),password=input("password: "),HWID=get_hwid())
+        #email, username, password,key,HWId
+        register(email=input("email: "),username=input("username: "),password=input("password: "),key=input("key: "),HWID=get_hwid())
     if resp == "1":
-        response = login(username=input("username: "),password=input("password: "),HWID=get_hwid())
+        response = login(username=input("Username:"),password=input("password:"),HWID=get_hwid())
+        #print(response)
+        #time.sleep(5)   
         if bool(response[0]) == True:
             while True:
                 os.system("cls")
                 print("                                     ",end="")
                 PrintGradient("#00FFFF","#FF69B4",NAME)
-                try:
+                try:    
                     try:
                         # Current date
                         current_date = datetime.datetime.now()
@@ -1098,33 +2020,32 @@ def auth():
                 except:
                         os.system("cls")
                         auth()
-                ctypes.windll.kernel32.SetConsoleTitleW(f"|GOAT-ALLL IN ONE|   |MODULE|:(Main-Menu)  |SUBSCRIPTION|:({difference})")
-                print("\n")
-                print("[1] Password Edits")
-                print("[2] Email Edits")
-                print("[3] Combo Edits")
-                print("[4] Dorking")
-                print("[5] Parsers")
-                print("[6] Credits")
-                Choicee = input("\n Choice: ")
+                ctypes.windll.kernel32.SetConsoleTitleW(f"|GOAT-ALLL IN ONE|  |VERSION|:3.8   |MODULE|:(Main-Menu)  |SUBSCRIPTION|:({difference})")
+                print(f"\n{wh}[{ree}1{wh}] Password Edits")
+                print(f"{wh}[{ree}2{wh}] Email Edits")
+                print(f"{wh}[{ree}3{wh}] Combo Edits")
+                print(f"{wh}[{ree}4{wh}] Combo Dumping")
+                print(f"{wh}[{ree}5{wh}] Parsers")
+                print(f"{wh}[{ree}6{wh}] Credits")
+                Choicee = input(f"\n{wh}[{ree}!{wh}] Goat Aio: ")
                 if Choicee == "1":
                     os.system("cls")
                     PrintGradient("#00FFFF","#FF69B4",NAME)
-                    ctypes.windll.kernel32.SetConsoleTitleW("|GOAT-ALLL IN ONE|   |MODULE|:(Password-Edits)")
-                    print("[1] password_limit")
-                    print("[2] Password hex")
-                    print("[3] Password extractor")
-                    print("[4] lowercase password")
-                    print("[5] uppercase password")
-                    print("[6] add prefix to password")
-                    print("[7] add suffix to password")
-                    print("[99] Main Menu")
-                    choice = input("Choice: ")
+                    ctypes.windll.kernel32.SetConsoleTitleW("|GOAT-ALLL IN ONE|  |VERSION|:3.8   |MODULE|:(Password-Edits)")
+                    print(f"\n{wh}[{ree}1{wh}] password_limit")
+                    print(f"{wh}[{ree}2{wh}] Password hex")
+                    print(f"{wh}[{ree}3{wh}] Password extractor")
+                    print(f"{wh}[{ree}4{wh}] lowercase password")
+                    print(f"{wh}[{ree}5{wh}] uppercase password")
+                    print(f"{wh}[{ree}6{wh}] add prefix to password")
+                    print(f"{wh}[{ree}7{wh}] add suffix to password")
+                    print(f"{wh}[{ree}99{wh}] Main Menu")
+                    choice = input(f"\n{wh}[{ree}!{wh}] Goat Aio: ")
                     if choice == "1":
-                        limit = input("limit EX[4,5,6,7]: ")
+                        limit = input(f"\n{ye}limit EX[4,5,6,7]: ")
                         password_limit(limit)
                     elif choice == "2":
-                        hex = input("HEX EX[#,$,*]: ")
+                        hex = input(f"\n{ye}HEX EX[#,$,*]: ")
                         password_hex(hex)
                     elif choice == "3":
                         password_extracor()
@@ -1142,16 +2063,16 @@ def auth():
                 elif Choicee == "2":
                     os.system("cls")
                     PrintGradient("#00FFFF","#FF69B4",NAME)
-                    ctypes.windll.kernel32.SetConsoleTitleW("|GOAT-ALLL IN ONE|   |MODULE|:(Email-Edits)")
-                    print("[1] Domain changer")
-                    print("[2] Email extractor")
-                    print("[3] filter combo by domain")
-                    print("[4] Email:pass to user:pass")
-                    print("[5] Domain sorter")
-                    print("[6] check domains")
+                    ctypes.windll.kernel32.SetConsoleTitleW("|GOAT-ALLL IN ONE|  |VERSION|:3.8   |MODULE|:(Email-Edits)")
+                    print(f"\n{wh}[{ree}1{wh}] Domain changer")
+                    print(f"{wh}[{ree}2{wh}] Email extractor")
+                    print(f"{wh}[{ree}3{wh}] Filter combo by domain")
+                    print(f"{wh}[{ree}4{wh}] Email:pass to user:pass")
+                    print(f"{wh}[{ree}5{wh}] Domain sorter")
+                    print(f"{wh}[{ree}6{wh}] Check domains")
                     #print("[7] remove numbers from emails")
-                    print("[99] Main Menu")
-                    choice = input("Choice: ")
+                    print(f"[99] Main Menu")
+                    choice = input(f"\n{wh}[{ree}!{wh}] Goat Aio: ")
                     if choice == "1":
                         dom = input("Domain Ex(@gmail.com): ")
                         domain_changer(dom)
@@ -1172,16 +2093,16 @@ def auth():
                     os.system("cls")
                     PrintGradient("#00FFFF","#FF69B4",NAME)
                     
-                    ctypes.windll.kernel32.SetConsoleTitleW("|GOAT-ALLL IN ONE|   |MODULE|:(Combo-Edits)")
-                    print("[1] Combo cleaner")
-                    print("[2] reverser")
-                    print("[3] combo sorter")
-                    print("[4] shuffle")
-                    print("[5] redupe")
-                    print("[6] LQ TO HQ")
-                    #print("[7] Join Multiple Combos Together")
-                    print("[99] Main Menu")
-                    choice = input("Choice: ")
+                    ctypes.windll.kernel32.SetConsoleTitleW("|GOAT-ALLL IN ONE|  |VERSION|:3.8   |MODULE|:(Combo-Edits)")
+                    print(f"\n{wh}[{ree}1{wh}] Combo cleaner")
+                    print(f"{wh}[{ree}2{wh}] Reverser")
+                    print(f"{wh}[{ree}3{wh}] Combo sorter")
+                    print(f"{wh}[{ree}4{wh}] Shuffle")
+                    print(f"{wh}[{ree}5{wh}] Redupe")
+                    print(f"{wh}[{ree}6{wh}] LQ TO HQ")
+                    print(f"{wh}[{ree}7{wh}] Line counter")
+                    print(f"{wh}[{ree}99{wh}] Main Menu")
+                    choice = input(f"\n{wh}[{ree}!{wh}] Goat Aio: ")
                     if choice == "1":
                         CLEANER()
                     elif choice == "2":
@@ -1194,43 +2115,53 @@ def auth():
                         remove_dupes()
                     elif choice == "6":
                         LQTOHQ()
-                   # elif choice == "7":
-                     #   Join_multiple_combos()
+                    elif choice == "7":
+                     ComboLineCounter()
                     elif choice == "99":
                         pass  
                     
                 elif Choicee == "4":
                     os.system("cls")
                     PrintGradient("#00FFFF","#FF69B4",NAME)
-                    ctypes.windll.kernel32.SetConsoleTitleW("|GOAT-ALLL IN ONE|   |MODULE|:(Dorking)")
-                    print("[1] scrape Pagetypes")
-                    print("[2] scrape Pageformats")
-                    print("[3] filter URls")
-                    print("[4] SQl Scanner")
-                    print("[5] Get Parameters from Url")
-                    print("[99] Main Menu")
-                    Choice = input("Choice: ")
+                    ctypes.windll.kernel32.SetConsoleTitleW("|GOAT-ALLL IN ONE|  |VERSION|:3.8   |MODULE|:(Dorking)")
+                    print(f"\n{wh}[{ree}1{wh}] Dork Maker")
+                    print(f"{wh}[{ree}2{wh}] scrape Pagetypes")
+                    print(f"{wh}[{ree}3{wh}] scrape Pageformats")
+                    print(f"{wh}[{ree}4{wh}] Get Parameters from Url")
+                    print(f"{wh}[{ree}5{wh}] Get keywords from Url")
+                    print(f"{wh}[{ree}6{wh}] filter URls")
+                    print(f"{wh}[{ree}7{wh}] SQl Scanner")
+                    #print(f"{wh}[{ree}8{wh}] Automatic Combo Leecher")
+                    print(f"{wh}[{ree}99{wh}] Main Menu")
+                    Choice = input(f"\n{wh}[{ree}!{wh}] Goat Aio: ")
                     if Choice== "1":
-                        get_pagetypes()
+                        dorkbeg()
                     elif Choice == "2":
-                        get_pageformats()
+                        get_pagetypes()
                     elif Choice == "3":
-                        Filter_urls()
+                        get_pageformats()
                     elif Choice == "4":
-                        SQL_SCANNER()
-                    elif Choice == "5":
                         get_pagetypes_from_urls()
+                    elif Choice == "5":
+                        keywords_from_urls()
+                    elif Choice == "6":
+                        Filter_urls()
+                    elif Choice == "7":
+                        SQL_SCANNER()
+                    #elif Choice == "8":
+                      #  get_combos()
                     elif Choice == "99":
                         pass
                 elif Choicee == "5":
                     os.system("cls")
                     PrintGradient("#00FFFF","#FF69B4",NAME)
-                    print("\n\n\n{ISNT FINISHED YET WAIT TILL NEXT UPDATE}")
+                    print("\n{ISNT FINISHED YET WAIT TILL NEXT UPDATE}")
                     time.sleep(5)
                     os.system("cls")
                 elif Choicee == "6":
                     print("IQTHEGOAT#0310\n! Y1ZOX7#9758\nKillinMachine#2570")
                     time.sleep(5)
+                
         else:
             print("[!] Invalid Choice")
             print("[!] Please try again")
