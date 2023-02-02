@@ -47,7 +47,7 @@ class counter():
     def __init__(self):
         count = 0  
 
-website = "https://goatauth.deta.dev/"
+website = ""#YOUR API
 
 
 bl, ree, lr, wh, gr, cy, lb, res, ma, lm, lc, ye = Fore.BLUE, Fore.RED, Fore.LIGHTRED_EX, Fore.WHITE, Fore.GREEN, Fore.CYAN, Fore.LIGHTBLUE_EX, Fore.RESET, Fore.MAGENTA, Fore.LIGHTMAGENTA_EX, Fore.LIGHTCYAN_EX, Fore.YELLOW
@@ -87,7 +87,7 @@ def f1(func):
                 msg = f"```TIME:{str(datetime.datetime.now())[:-7].replace(':','-')}\nERORR HAPPENED:{E}\nNAME:{name}\nPRIVATE IP: {privateIp}\nFUNC={str(func).split('at')[0]}```"
                 with open("errors.txt", "a",errors="ignore") as errors:
                     errors.write(f"TIME:{str(datetime.datetime.now())[:-7].replace(':','-')}  ERORR HAPPENED:{E}\n")
-                    send_to_webhook(message=msg,webhook="https://discord.com/api/webhooks/1058380609887686696/LMb_oRZTMg5JloxsAZLOaJtnXdujKXQEe3bPBGHihsE6M2sAphj9eN52rd8D8lJxNBR1")
+                    send_to_webhook(message=msg,webhook="") #YOUR WEBHOOK
             except:
                 pass
 
